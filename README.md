@@ -9,7 +9,7 @@ solicitados.
 + Registrar el acceso de los usuarios y la actividad en un Logger (por ejemplo log4js ).
 ### Arquitectura
 La aplicación deberá estar obligatoriamente diseñada siguiente el patrón arquitectónico visto en clase. La
-utilización incorrecta de elementos de esta arquitectura será fuertemente penalizada (por ejemplo,
+utilización incorrecta de elementos de esta arquitectura será **fuertemente penalizada** (por ejemplo,
 implementar parte de la lógica de negocio de la aplicación en un controlador, acceder a un repositorio
 desde un controlador, configurar una vista desde un servicio, etc.).
 Los servicios web REST deben seguir la arquitectura RESTful , se deben utilizar URLs y métodos Http
