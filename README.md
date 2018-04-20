@@ -37,7 +37,7 @@ nombre .\sdi2-test-n
 + + sdi2-n
 + + sdi2-test-n
 ## Fecha máxima de entrega
-La fecha de entrega será dependiente del grupo de laboratorio, coincidiendo con 6 días DESPUES de a
+La fecha de entrega será dependiente del grupo de laboratorio, coincidiendo con 12 días DESPUES de a
 la impartición de la práctica 11 en el el grupo al que pertenece el alumno, la hora límite serán las 20:00.
 Por ejemplo, el grupo del L1 del Miércoles, tiene la práctica 11 el 25/04 por lo tanto deberá entregar el:
 30/04 a las 20:00
