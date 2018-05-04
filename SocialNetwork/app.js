@@ -27,6 +27,11 @@ app.set('crypto',crypto);
 /* CONTROLLERS*/
 require("./routes/rusuarios.js")(app, swig, gestorBD);
 
+/* FIRST CONNECTION REDIRECT */
+app.get('/', function (req, res) {
+    res.redirect('/identificarse');
+});
+
 /* MESSAGES AND PORT */
 app.listen(8081, function(){
 	console.log("Servidor activo");
