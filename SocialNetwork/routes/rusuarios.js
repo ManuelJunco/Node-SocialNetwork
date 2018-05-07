@@ -54,7 +54,7 @@ module.exports = function (app, swig, gestorBD) {
             } else {
                 /* Third - Check length */
                 if (req.body.password.length < 7) {
-                    res.redirect("/registrarse?mensaje=Password demasiado corta&tipoMensaje=alert-danger");
+                    res.redirect("/registrarse?mensaje=Password demasiado corta, minimo 7 caracteres&tipoMensaje=alert-danger");
                 } else {
                     /* Fourth - Check if already exists */
                     var criterio = {
@@ -64,7 +64,7 @@ module.exports = function (app, swig, gestorBD) {
                         if (usuarios == null) {
                             res.redirect("/registrarse?mensaje=Error al registrar al usuario&tipoMensaje=alert-danger");
                         } else {
-                            if (usuarios[0].email == req.body.email) {                            	
+                            if (usuarios[0] != null) {
                                 res.redirect("/registrarse?mensaje=El email ya existe&tipoMensaje=alert-danger");
                             } else {
                                 /* Adding user */
