@@ -1,11 +1,31 @@
 {% extends "base.html" %}
 {% block titulo %} Usuarios de la aplicación {% endblock %}
 {% block nav_bar %}
-<li id="listaUsuarios"><a href="/compras">Lista de usuarios</a></li>
+<li id="listaUsuarios"><a href="/usuario">Lista de usuarios</a></li>
+{% endblock %}
+{% block nav_bar_right %}
 <li id="desconectarse"><a href="/desconectarse">Desconectarse</a></li>
 {% endblock %}
 
 {% block contenido_principal %}
+<!-- Búsqueda -->
+<div class="row">
+    <div id="custom-search-input ">
+        <form method="get" action="/usuario">
+            <div
+                    class="input-group col-xs-8 col-sm-6 col-md-4 col-lg-5 pull-right">
+                <input type="text" class="search-query form-control"
+                       placeholder="nombre o email" name="busqueda"/>
+                <span class="input-group-btn">
+                    <button class="btn" type="submit">
+                        <span class="glyphicon glyphicon-search"></span>
+                    </button>
+                </span>
+            </div>
+        </form>
+    </div>
+</div>
+
 <h2>Todos los usuarios</h2>
 
 <!-- Users of app -->

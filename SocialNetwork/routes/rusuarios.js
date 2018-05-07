@@ -103,20 +103,26 @@ module.exports = function (app, swig, gestorBD) {
     app.get("/usuario", function (req, res) {
         var criterio = {};
 
+        if (req.query.busqueda != null) {
+            var search = { $regex: ".*" + req.query.busqueda + ".*" };
+            criterio = {$or : [ {"nombre": search }, {"email" : search } ]};
+        }
         var pg = parseInt(req.query.pg);
         if (req.query.pg == null) {
             pg = 1;
         }
         gestorBD.obtenerUsuariosPg(criterio, pg, function (usuarios, total) {
             if (usuarios == null) {
-                res.redirect("/usuario?mensaje=Error al listar los usuarios&tipoMensaje=alert-danger");
+                res.send("Error al listar "); /* ¿A DÓNDE DEBERÍA REDIRIGIR? */
             } else {
-
-                var pgUltima = total / 4;
-                if (total % 4 > 0) {
-                    pgUltima = pgUltima + 1;
+                if(total > usuarios.length) {
+                    var pgUltima = total / 5;
+                    if (total % 5 > 0) {
+                        pgUltima = pgUltima + 1;
+                    }
+                } else {
+                    pgUltima = 1;
                 }
-
                 var respuesta = swig.renderFile('views/home.html',
                     {
                         usuarios: usuarios,
