@@ -53,31 +53,31 @@
     <ul class="pagination">
         <!-- Primera -->
         <li class="page-item">
-            <a class="page-link" href="/usuario?pg=1">Primera</a>
+            <a class="page-link" href="/usuario?pg=1&busqueda={{search}}">Primera</a>
         </li>
 
         <!-- Anterior (si la hay ) -->
         {% if pgActual-1 >= 1 %}
         <li class="page-item">
-            <a class="page-link" href="/usuario?pg={{ pgActual -1 }}">{{ pgActual -1 }}</a>
+            <a class="page-link" href="/usuario?pg={{ pgActual -1 }}&busqueda={{search}}">{{ pgActual -1 }}</a>
         </li>
         {% endif %}
 
         <!-- Actual -->
         <li class="page-item active">
-            <a class="page-link" href="/usuario?pg={{ pgActual }}">{{ pgActual }}</a>
+            <a class="page-link" href="/usuario?pg={{ pgActual }}&busqueda={{search}}">{{ pgActual }}</a>
         </li>
 
         <!-- Siguiente (si la hay) -->
         {% if pgActual+1 <= pgUltima %}
         <li class="page-item">
-            <a class="page-link" href="/usuario?pg={{ pgActual+1 }}">{{ pgActual+1 }}</a>
+            <a class="page-link" href="/usuario?pg={{ pgActual+1 }}&busqueda={{search}}">{{ pgActual+1 }}</a>
         </li>
         {% endif %}
 
         <!-- Última -->
         <li class="page-item">
-            <a class="page-link" href="/usuario?pg={{ pgUltima }}">Última</a>
+            <a class="page-link" href="/usuario?pg={{ pgUltima }}&busqueda={{search}}">Última</a>
         </li>
     </ul>
 </div>

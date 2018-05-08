@@ -102,32 +102,31 @@ module.exports = function (app, swig, gestorBD) {
     /* Shows the home page with the user list - Includes pagination */
     app.get("/usuario", function (req, res) {
         var criterio = {};
-
+        var criterioCount = {};
         if (req.query.busqueda != null) {
-            var search = { $regex: ".*" + req.query.busqueda + ".*" };
-            criterio = {$or : [ {"nombre": search }, {"email" : search } ]};
+            var expReg = {$regex: ".*" + req.query.busqueda + ".*"};
+            criterio = {$or: [{"nombre": expReg}, {"email": expReg}]};
+            criterioCount = criterio;
         }
         var pg = parseInt(req.query.pg);
         if (req.query.pg == null) {
             pg = 1;
         }
-        gestorBD.obtenerUsuariosPg(criterio, pg, function (usuarios, total) {
+        gestorBD.obtenerUsuariosPg(criterioCount, criterio, pg, function (usuarios, total) {
             if (usuarios == null) {
-                res.send("Error al listar "); /* ¿A DÓNDE DEBERÍA REDIRIGIR? */
+                res.send("Error al listar ");
+                /* ¿A DÓNDE DEBERÍA REDIRIGIR? */
             } else {
-                if(total > usuarios.length) {
-                    var pgUltima = total / 5;
-                    if (total % 5 > 0) {
-                        pgUltima = pgUltima + 1;
-                    }
-                } else {
-                    pgUltima = 1;
+                var pgUltima = total / 5;
+                if (total % 5 > 0) {
+                    pgUltima = pgUltima + 1;
                 }
                 var respuesta = swig.renderFile('views/home.html',
                     {
                         usuarios: usuarios,
                         pgActual: pg,
-                        pgUltima: pgUltima
+                        pgUltima: pgUltima,
+                        search: req.query.busqueda
                     });
                 res.send(respuesta);
             }

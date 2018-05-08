@@ -5,13 +5,13 @@ module.exports = {
         this.mongo = mongo;
         this.app = app;
     },
-    obtenerUsuariosPg : function(criterio,pg,funcionCallback){
+    obtenerUsuariosPg : function(criterioCount, criterio,pg,funcionCallback){
         this.mongo.MongoClient.connect(this.app.get('db'), function(err, db) {
             if (err) {
                 funcionCallback(null);
             } else {
                 var collection = db.collection('usuarios');
-                collection.count(function(err, count){
+                collection.count(criterioCount,function(err, count){
                     collection.find(criterio).skip( (pg-1)*5 ).limit( 5 )
                         .toArray(function(err, usuarios) {
                             if (err) {
