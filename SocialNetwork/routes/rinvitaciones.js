@@ -12,7 +12,7 @@ module.exports = function (app, swig, gestorBD) {
         if (req.query.pg == null) {
             pg = 1;
         }
-        gestorBD.obtenerUsuariosPg(criterioCount, criterio, pg, function (usuarios, total) {
+        gestorBD.obtenerInvitacionesPg(criterioCount, criterio, pg, function (usuarios, total) {
             if (usuarios == null) {
                 res.send("Error al listar ");
                 /* ¿A DÓNDE DEBERÍA REDIRIGIR? */
