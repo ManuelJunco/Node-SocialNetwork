@@ -48,7 +48,8 @@ module.exports = function (app, swig, gestorBD) {
     app.post("/registrarse", function (req, res) {
         /*First . Check password*/
         if (req.body.password != req.body.confirmPassword) {
-            res.redirect("/registrarse?mensaje=La password y su confirmación deben ser iguales&tipoMensaje=alert-danger");
+            res.redirect("/registrarse?mensaje=La password y su confirmación deben ser iguales&tipoMensaje"
+                + "=alert-danger");
         } else {
             var re = /\S+@\S+/;
             /* Second - Check email */
@@ -57,18 +58,21 @@ module.exports = function (app, swig, gestorBD) {
             } else {
                 /* Third - Check password */
                 if (req.body.password.length < 7) {
-                    res.redirect("/registrarse?mensaje=Password demasiado corta, minimo 7 caracteres&tipoMensaje=alert-danger");
+                    res.redirect("/registrarse?mensaje=Password demasiado corta, minimo 7 caracteres&tipoMensaje"
+                        + "=alert-danger");
                 } else {
                     /* Fourth - Check the name */
                     if (req.body.nombre < 3) {
-                        res.redirect("/registrarse?mensaje=El nombre es demasiado corto, minimo 3 caracteres&tipoMensaje=alert-danger");
+                        res.redirect("/registrarse?mensaje=El nombre es demasiado corto, minimo 3 caracteres&"
+                            + "tipoMensaje=alert-danger");
                     } else {
                         var criterio = {
                             email: req.body.email
                         };
                         gestorBD.obtenerUsuarios(criterio, function (usuarios) {
                             if (usuarios == null) {
-                                res.redirect("/registrarse?mensaje=Error al registrar al usuario&tipoMensaje=alert-danger");
+                                res.redirect("/registrarse?mensaje=Error al registrar al usuario&tipoMensaje="
+                                    + "alert-danger");
                             } else {
                                 /* Fifth - Check email */
                                 if (usuarios[0] != null) {
@@ -84,7 +88,8 @@ module.exports = function (app, swig, gestorBD) {
                                     };
                                     gestorBD.insertarUsuario(usuario, function (id) {
                                         if (id == null) {
-                                            res.redirect("/registrarse?mensaje=Error al registrar usuario&tipoMensaje=alert-danger");
+                                            res.redirect("/registrarse?mensaje=Error al registrar usuario&tipoMensaje"
+                                                + "=alert-danger");
                                         } else {
                                             res.redirect("/identificarse?mensaje=Nuevo usuario registrado");
                                         }
@@ -126,9 +131,45 @@ module.exports = function (app, swig, gestorBD) {
                         usuarios: usuarios,
                         pgActual: pg,
                         pgUltima: pgUltima,
-                        search: req.query.busqueda
+                        search: req.query.busqueda,
+                        me: req.session.usuario
                     });
                 res.send(respuesta);
+            }
+        });
+    });
+
+
+    /* A user sends a friend request to another */
+    app.post("/peticion/:email", function (req, res) {
+        /* Check if the user is already on peticiones */
+        var criterio = {
+            origen: req.session.usuario,
+            destino: req.params.email
+        };
+        gestorBD.obtenerPeticiones(criterio, function (peticiones) {
+            if (peticiones == null) {
+                res.send("Error al enviar petición ");
+                /* ¿A DÓNDE DEBERÍA REDIRIGIR? */
+            } else {
+                if(peticiones[0] != null) {
+                    res.redirect("/usuario?mensaje=Peticion ya enviada o amistad existente&"
+                        +"tipoMensaje=alert-danger");
+                } else {
+                    var peticion = {
+                        origen: req.session.usuario,
+                        destino: req.params.email,
+                        aceptada: false
+                    };
+                    gestorBD.insertarPeticion(peticion, function (id) {
+                        if (id == null) {
+                            res.send("Error al enviar petición ");
+                            /* ¿A DÓNDE DEBERÍA REDIRIGIR? */
+                        } else {
+                            res.redirect("/usuario");
+                        }
+                    });
+                }
             }
         });
     });

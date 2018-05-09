@@ -35,13 +35,21 @@
         <tr>
             <th>Nombre</th>
             <th>Email</th>
+            <th>Petición de amistad</th>
         </tr>
         </thead>
         <tbody>
         {% for usuario in usuarios %}
         <tr>
-            <td>{{ usuario.nombre }}</td>
-            <td>{{ usuario.email }}</td>
+            <form class="form-horizontal" method="post" action="/peticion/{{ usuario.email }}">
+                <td name="nombre">{{ usuario.nombre }}</td>
+                <td name="email">{{ usuario.email }}</td>
+                {% if usuario.email != me %}
+                <td>
+                    <button type="submit" class="btn btn-primary">Enviar</button>
+                </td>
+                {% endif %}
+            </form>
         </tr>
         {% endfor %}
         </tbody>
@@ -53,31 +61,31 @@
     <ul class="pagination">
         <!-- Primera -->
         <li class="page-item">
-            <a class="page-link" href="/usuario?pg=1&busqueda={{search}}">Primera</a>
+            <a class="page-link" href="/usuario?pg=1&busqueda={{ search }}">Primera</a>
         </li>
 
         <!-- Anterior (si la hay ) -->
         {% if pgActual-1 >= 1 %}
         <li class="page-item">
-            <a class="page-link" href="/usuario?pg={{ pgActual -1 }}&busqueda={{search}}">{{ pgActual -1 }}</a>
+            <a class="page-link" href="/usuario?pg={{ pgActual -1 }}&busqueda={{ search }}">{{ pgActual -1 }}</a>
         </li>
         {% endif %}
 
         <!-- Actual -->
         <li class="page-item active">
-            <a class="page-link" href="/usuario?pg={{ pgActual }}&busqueda={{search}}">{{ pgActual }}</a>
+            <a class="page-link" href="/usuario?pg={{ pgActual }}&busqueda={{ search }}">{{ pgActual }}</a>
         </li>
 
         <!-- Siguiente (si la hay) -->
         {% if pgActual+1 <= pgUltima %}
         <li class="page-item">
-            <a class="page-link" href="/usuario?pg={{ pgActual+1 }}&busqueda={{search}}">{{ pgActual+1 }}</a>
+            <a class="page-link" href="/usuario?pg={{ pgActual+1 }}&busqueda={{ search }}">{{ pgActual+1 }}</a>
         </li>
         {% endif %}
 
         <!-- Última -->
         <li class="page-item">
-            <a class="page-link" href="/usuario?pg={{ pgUltima }}&busqueda={{search}}">Última</a>
+            <a class="page-link" href="/usuario?pg={{ pgUltima }}&busqueda={{ search }}">Última</a>
         </li>
     </ul>
 </div>
