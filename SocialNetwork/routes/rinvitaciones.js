@@ -12,7 +12,7 @@ module.exports = function (app, swig, gestorBD) {
         if (req.query.pg == null) {
             pg = 1;
         }
-        gestorBD.obtenerInvitacionesPg(criterioCount, criterio, pg, function (usuarios, total) {
+        gestorBD.obtenerInvitacionesPg(criterioCount, criterio, pg, function (invitaciones, total) {
             if (usuarios == null) {
                 res.send("Error al listar ");
                 /* ¿A DÓNDE DEBERÍA REDIRIGIR? */
@@ -21,9 +21,9 @@ module.exports = function (app, swig, gestorBD) {
                 if (total % 5 > 0) {
                     pgUltima = pgUltima + 1;
                 }
-                var respuesta = swig.renderFile('views/home.html',
+                var respuesta = swig.renderFile('views/invitationList.html',
                     {
-                        usuarios: usuarios,
+                        invitaciones: invitaciones,
                         pgActual: pg,
                         pgUltima: pgUltima,
                         search: req.query.busqueda
