@@ -46,9 +46,10 @@ module.exports = function (app, swig, gestorBD) {
 
     /* Receive the post req from signup html */
     app.post("/registrarse", function (req, res) {
-        /*First . Check password*/
+        /*First - Check password*/
         if (req.body.password != req.body.confirmPassword) {
-            res.redirect("/registrarse?mensaje=La password y su confirmación deben ser iguales&tipoMensaje=alert-danger");
+            res.redirect("/registrarse?mensaje=La password y su confirmación deben ser iguales&tipoMensaje"
+                + "=alert-danger");
         } else {
             var re = /\S+@\S+/;
             /* Second - Check email */
@@ -57,18 +58,21 @@ module.exports = function (app, swig, gestorBD) {
             } else {
                 /* Third - Check password */
                 if (req.body.password.length < 7) {
-                    res.redirect("/registrarse?mensaje=Password demasiado corta, minimo 7 caracteres&tipoMensaje=alert-danger");
+                    res.redirect("/registrarse?mensaje=Password demasiado corta, minimo 7 caracteres&tipoMensaje"
+                        + "=alert-danger");
                 } else {
                     /* Fourth - Check the name */
-                    if (req.body.nombre < 3) {
-                        res.redirect("/registrarse?mensaje=El nombre es demasiado corto, minimo 3 caracteres&tipoMensaje=alert-danger");
+                    if (req.body.nombre.length < 3) {
+                        res.redirect("/registrarse?mensaje=El nombre es demasiado corto, minimo 3 caracteres&"
+                            + "tipoMensaje=alert-danger");
                     } else {
                         var criterio = {
                             email: req.body.email
                         };
                         gestorBD.obtenerUsuarios(criterio, function (usuarios) {
                             if (usuarios == null) {
-                                res.redirect("/registrarse?mensaje=Error al registrar al usuario&tipoMensaje=alert-danger");
+                                res.redirect("/registrarse?mensaje=Error al registrar al usuario&tipoMensaje="
+                                    + "alert-danger");
                             } else {
                                 /* Fifth - Check email */
                                 if (usuarios[0] != null) {
@@ -84,7 +88,8 @@ module.exports = function (app, swig, gestorBD) {
                                     };
                                     gestorBD.insertarUsuario(usuario, function (id) {
                                         if (id == null) {
-                                            res.redirect("/registrarse?mensaje=Error al registrar usuario&tipoMensaje=alert-danger");
+                                            res.redirect("/registrarse?mensaje=Error al registrar usuario&tipoMensaje"
+                                                + "=alert-danger");
                                         } else {
                                             res.redirect("/identificarse?mensaje=Nuevo usuario registrado");
                                         }
@@ -105,7 +110,7 @@ module.exports = function (app, swig, gestorBD) {
         var criterioCount = {};
         if (req.query.busqueda != null) {
             var expReg = {$regex: ".*" + req.query.busqueda + ".*"};
-            criterio = {$or: [{"nombre": expReg}, {"email": expReg}]};
+            criterio = {$or: [{nombre: expReg}, {email: expReg}]};
             criterioCount = criterio;
         }
         var pg = parseInt(req.query.pg);
@@ -124,6 +129,114 @@ module.exports = function (app, swig, gestorBD) {
                 var respuesta = swig.renderFile('views/home.html',
                     {
                         usuarios: usuarios,
+                        pgActual: pg,
+                        pgUltima: pgUltima,
+                        search: req.query.busqueda,
+                        me: req.session.usuario
+                    });
+                res.send(respuesta);
+            }
+        });
+    });
+
+
+    /* A user sends a friend request to another */
+    app.post("/peticion/:email", function (req, res) {
+        /* Check if the target is already on peticiones */
+        var criterio = {
+            $or: [{origen: req.session.usuario, destino: req.params.email},
+                {destino: req.session.usuario, origen: req.params.email}]
+        };
+        gestorBD.obtenerPeticiones(criterio, function (peticiones) {
+            if (peticiones == null) {
+                res.send("Error al enviar petición ");
+                /* ¿A DÓNDE DEBERÍA REDIRIGIR? */
+            } else {
+                if (peticiones[0] != null) {
+                    if (peticiones[0] == true) {
+                        res.redirect("/usuario?mensaje=Este usuario ya es tu amigo&"
+                            + "tipoMensaje=alert-danger");
+                    } else {
+                        res.redirect("/usuario?mensaje=Esta petición ya ha sido enviada o quizás deberías" +
+                            " ver tu lista de peticiones recibidas&"
+                            + "tipoMensaje=alert-danger");
+                    }
+                } else {
+                    var peticion = {
+                        origen: req.session.usuario,
+                        destino: req.params.email,
+                        aceptada: false
+                    };
+                    gestorBD.insertarPeticion(peticion, function (id) {
+                        if (id == null) {
+                            res.send("Error al enviar petición ");
+                            /* ¿A DÓNDE DEBERÍA REDIRIGIR? */
+                        } else {
+                            res.redirect("/usuario?mensaje=Petición enviada con éxito");
+                        }
+                    });
+                }
+            }
+        });
+    });
+
+
+    /* Show the friends of connected user - Includes pagination */
+    app.get("/amigo", function (req, res) {
+        /* IMPORTANT: Search in peticiones collection */
+        var criterio = {
+            $or: [{origen: req.session.usuario, aceptada: true},
+                {destino: req.session.usuario, aceptada: true}]
+        };
+        var pg = parseInt(req.query.pg);
+        if (req.query.pg == null) {
+            pg = 1;
+        }
+        gestorBD.obtenerAmigosPg(req.session.usuario, criterio, pg, function (amigos, total) {
+            if (amigos == null) {
+                res.send("Error al listar amigos ");
+                /* ¿A DÓNDE DEBERÍA REDIRIGIR? */
+            } else {
+                var pgUltima = total / 5;
+                if (total % 5 > 0) {
+                    pgUltima = pgUltima + 1;
+                }
+                var respuesta = swig.renderFile('views/friends.html',
+                    {
+                        amigos: amigos,
+                        pgActual: pg,
+                        pgUltima: pgUltima,
+                    });
+                res.send(respuesta);
+            }
+        });
+    });
+    
+    /* Shows the invitation page with the invitations list - Includes pagination */
+    app.get("/invitaciones", function (req, res) {
+        var criterio = {};
+        var criterioCount = {};
+        if (req.query.busqueda != null) {
+            var expReg = {$regex: ".*" + req.query.busqueda + ".*"};
+            criterio = {$or: [{"nombre": expReg}, {"email": expReg}]};
+            criterioCount = criterio;
+        }
+        var pg = parseInt(req.query.pg);
+        if (req.query.pg == null) {
+            pg = 1;
+        }
+        gestorBD.obtenerInvitacionesPg(criterioCount, criterio, pg, function (invitaciones, total) {
+            if (usuarios == null) {
+                res.send("Error al listar ");
+                /* ¿A DÓNDE DEBERÍA REDIRIGIR? */
+            } else {
+                var pgUltima = total / 5;
+                if (total % 5 > 0) {
+                    pgUltima = pgUltima + 1;
+                }
+                var respuesta = swig.renderFile('views/invitationList.html',
+                    {
+                        invitaciones: invitaciones,
                         pgActual: pg,
                         pgUltima: pgUltima,
                         search: req.query.busqueda
