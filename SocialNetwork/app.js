@@ -41,6 +41,7 @@ routerUsuarioSession.use(function(req, res, next) {
     }
 });
 app.use("/usuario",routerUsuarioSession);
+app.use("/amigo",routerUsuarioSession);
 
 
 

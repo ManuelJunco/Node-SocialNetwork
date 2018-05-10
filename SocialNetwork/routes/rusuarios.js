@@ -46,7 +46,7 @@ module.exports = function (app, swig, gestorBD) {
 
     /* Receive the post req from signup html */
     app.post("/registrarse", function (req, res) {
-        /*First . Check password*/
+        /*First - Check password*/
         if (req.body.password != req.body.confirmPassword) {
             res.redirect("/registrarse?mensaje=La password y su confirmación deben ser iguales&tipoMensaje"
                 + "=alert-danger");
@@ -62,7 +62,7 @@ module.exports = function (app, swig, gestorBD) {
                         + "=alert-danger");
                 } else {
                     /* Fourth - Check the name */
-                    if (req.body.nombre < 3) {
+                    if (req.body.nombre.length < 3) {
                         res.redirect("/registrarse?mensaje=El nombre es demasiado corto, minimo 3 caracteres&"
                             + "tipoMensaje=alert-danger");
                     } else {
@@ -110,7 +110,7 @@ module.exports = function (app, swig, gestorBD) {
         var criterioCount = {};
         if (req.query.busqueda != null) {
             var expReg = {$regex: ".*" + req.query.busqueda + ".*"};
-            criterio = {$or: [{"nombre": expReg}, {"email": expReg}]};
+            criterio = {$or: [{nombre: expReg}, {email: expReg}]};
             criterioCount = criterio;
         }
         var pg = parseInt(req.query.pg);
@@ -142,19 +142,25 @@ module.exports = function (app, swig, gestorBD) {
 
     /* A user sends a friend request to another */
     app.post("/peticion/:email", function (req, res) {
-        /* Check if the user is already on peticiones */
+        /* Check if the target is already on peticiones */
         var criterio = {
-            origen: req.session.usuario,
-            destino: req.params.email
+            $or: [{origen: req.session.usuario, destino: req.params.email},
+                {destino: req.session.usuario, origen: req.params.email}]
         };
         gestorBD.obtenerPeticiones(criterio, function (peticiones) {
             if (peticiones == null) {
                 res.send("Error al enviar petición ");
                 /* ¿A DÓNDE DEBERÍA REDIRIGIR? */
             } else {
-                if(peticiones[0] != null) {
-                    res.redirect("/usuario?mensaje=Peticion ya enviada o amistad existente&"
-                        +"tipoMensaje=alert-danger");
+                if (peticiones[0] != null) {
+                    if (peticiones[0] == true) {
+                        res.redirect("/usuario?mensaje=Este usuario ya es tu amigo&"
+                            + "tipoMensaje=alert-danger");
+                    } else {
+                        res.redirect("/usuario?mensaje=Esta petición ya ha sido enviada o quizás deberías" +
+                            " ver tu lista de peticiones recibidas&"
+                            + "tipoMensaje=alert-danger");
+                    }
                 } else {
                     var peticion = {
                         origen: req.session.usuario,
@@ -166,10 +172,42 @@ module.exports = function (app, swig, gestorBD) {
                             res.send("Error al enviar petición ");
                             /* ¿A DÓNDE DEBERÍA REDIRIGIR? */
                         } else {
-                            res.redirect("/usuario");
+                            res.redirect("/usuario?mensaje=Petición enviada con éxito");
                         }
                     });
                 }
+            }
+        });
+    });
+
+
+    /* Show the friends of connected user - Includes pagination */
+    app.get("/amigo", function (req, res) {
+        /* IMPORTANT: Search in peticiones collection */
+        var criterio = {
+            $or: [{origen: req.session.usuario, aceptada: true},
+                {destino: req.session.usuario, aceptada: true}]
+        };
+        var pg = parseInt(req.query.pg);
+        if (req.query.pg == null) {
+            pg = 1;
+        }
+        gestorBD.obtenerAmigosPg(req.session.usuario, criterio, pg, function (amigos, total) {
+            if (amigos == null) {
+                res.send("Error al listar amigos ");
+                /* ¿A DÓNDE DEBERÍA REDIRIGIR? */
+            } else {
+                var pgUltima = total / 5;
+                if (total % 5 > 0) {
+                    pgUltima = pgUltima + 1;
+                }
+                var respuesta = swig.renderFile('views/friends.html',
+                    {
+                        amigos: amigos,
+                        pgActual: pg,
+                        pgUltima: pgUltima,
+                    });
+                res.send(respuesta);
             }
         });
     });
