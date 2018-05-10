@@ -130,23 +130,6 @@ module.exports = {
             }
         });
     },
-    obtenerInvitaciones : function(criterio, funcionCallback) {
-		this.mongo.MongoClient.connect(this.app.get('db'), function(err, db) {
-			if (err) {
-				funcionCallback(null);
-			} else {
-				var collection = db.collection('invitaciones');
-				collection.find(criterio).toArray(function(err, invitaciones) {
-					if (err) {
-						funcionCallback(null);
-					} else {
-						funcionCallback(invitaciones);
-					}
-					db.close();
-				});
-			}
-		});
-	},
 	obtenerInvitacionesPg : function(criterioCount, criterio, pg,
 			funcionCallback) {
 		this.mongo.MongoClient.connect(this.app.get('db'), function(err, db) {
