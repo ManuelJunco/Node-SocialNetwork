@@ -33,9 +33,9 @@
 			{% for peticion in peticiones %}
 			<tr>
 				<form class="form-horizontal" method="post"
-					action="/peticion/aceptar/{{ peticion.usuario.email }}">
-				<td>{{ peticion.usuario.nombre }}</td>
-				<td>{{ peticion.usuario.email }}</td>
+					action="/peticion/aceptar/{{ peticion.email }}">
+				<td>{{ peticion.nombre }}</td>
+				<td>{{ peticion.email }}</td>
 				<td><button type="submit" class="btn btn-primary">Aceptar</button></td>
 			</tr>
 			{% endfor %}
@@ -49,28 +49,28 @@
 	<ul class="pagination">
 		<!-- Primera -->
 		<li class="page-item"><a class="page-link"
-			href="/usuario?pg=1&busqueda={{search}}">Primera</a></li>
+			href="/invitaciones?pg=1&busqueda={{search}}">Primera</a></li>
 
 		<!-- Anterior (si la hay ) -->
 		{% if pgActual-1 >= 1 %}
 		<li class="page-item"><a class="page-link"
-			href="/usuario?pg={{ pgActual -1 }}&busqueda={{search}}">{{
+			href="/invitaciones?pg={{ pgActual -1 }}&busqueda={{search}}">{{
 				pgActual -1 }}</a></li> {% endif %}
 
 		<!-- Actual -->
 		<li class="page-item active"><a class="page-link"
-			href="/usuario?pg={{ pgActual }}&busqueda={{search}}">{{ pgActual
+			href="/invitaciones?pg={{ pgActual }}&busqueda={{search}}">{{ pgActual
 				}}</a></li>
 
 		<!-- Siguiente (si la hay) -->
 		{% if pgActual+1 <= pgUltima %}
 		<li class="page-item"><a class="page-link"
-			href="/usuario?pg={{ pgActual+1 }}&busqueda={{search}}">{{
+			href="/invitaciones?pg={{ pgActual+1 }}&busqueda={{search}}">{{
 				pgActual+1 }}</a></li> {% endif %}
 
 		<!-- Última -->
 		<li class="page-item"><a class="page-link"
-			href="/usuario?pg={{ pgUltima }}&busqueda={{search}}">Última</a></li>
+			href="/invitaciones?pg={{ pgUltima }}&busqueda={{search}}">Última</a></li>
 	</ul>
 </div>
 {% endblock %}
