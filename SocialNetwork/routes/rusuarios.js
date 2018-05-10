@@ -214,7 +214,7 @@ module.exports = function (app, swig, gestorBD) {
     
     /* Shows the invitation page with the invitations list - Includes pagination */
     app.get("/invitaciones", function (req, res) {
-        var criterio = {};
+        var criterio = req.session.usuario;
         var criterioCount = {};
         if (req.query.busqueda != null) {
             var expReg = {$regex: ".*" + req.query.busqueda + ".*"};
