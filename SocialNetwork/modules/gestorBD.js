@@ -5,6 +5,42 @@ module.exports = {
         this.mongo = mongo;
         this.app = app;
     },
+    obtenerAmigos: function (me, criterio, funcionCallback) {
+        this.mongo.MongoClient.connect(this.app.get('db'), function (err, db) {
+            if (err) {
+                funcionCallback(null);
+            } else {
+                var collection = db.collection('peticiones');
+                collection.find(criterio).toArray(function (err, peticiones) {
+                    if (err) {
+                        funcionCallback(null);
+                    } else {
+                        var aux = [peticiones.length];
+                        for (var i in peticiones) {
+                            if (me != peticiones[i].origen) {
+                                aux[i] = peticiones[i].origen;
+                            } else {
+                                aux[i] = peticiones[i].destino;
+                            }
+                        }
+                        var criterio2 = {
+                            email: {$in: aux}
+                        }
+                        var collection2 = db.collection('usuarios');
+                        collection2.find(criterio2).toArray(function (err, usuarios) {
+                            if (err) {
+                                funcionCallback(null);
+                            } else {
+                                funcionCallback(usuarios);
+                            }
+                            db.close();
+                        });
+
+                    }
+                });
+            }
+        });
+    },
     obtenerAmigosPg: function (me, criterio, pg, funcionCallback) {
         this.mongo.MongoClient.connect(this.app.get('db'), function (err, db) {
             if (err) {
@@ -16,15 +52,15 @@ module.exports = {
                         funcionCallback(null);
                     } else {
                         var aux = [peticiones.length];
-                        for(var i in peticiones){
-                            if(me != peticiones[i].origen) {
+                        for (var i in peticiones) {
+                            if (me != peticiones[i].origen) {
                                 aux[i] = peticiones[i].origen;
                             } else {
                                 aux[i] = peticiones[i].destino;
                             }
                         }
                         var criterio2 = {
-                            email: { $in: aux }
+                            email: {$in: aux}
                         }
                         var collection2 = db.collection('usuarios');
                         collection2.count(criterio2, function (err, count) {

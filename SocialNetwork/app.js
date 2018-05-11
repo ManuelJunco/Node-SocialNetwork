@@ -6,6 +6,10 @@ var app = express();
 
 
 /*---------------------------------- GLOBAL VARIABLES - MODULES - ROUTES -------------------------------------*/
+/*** jsonwebtoken installed ***/
+var jwt = require('jsonwebtoken');
+app.set('jwt',jwt);
+
 /*** express-session installed ***/
 var expressSession = require('express-session');
 app.use(expressSession({
@@ -29,6 +33,39 @@ app.use(bodyParser.urlencoded({ extended: true }));
 var gestorBD = require("./modules/gestorBD.js");
 gestorBD.init(app,mongo);
 
+/*** token route - important ***/
+var routerUsuarioToken = express.Router();
+routerUsuarioToken.use(function(req, res, next) {
+    /*** we need the token, it can be included in POST, GET or HEADERS ***/
+    var token = req.body.token || req.query.token || req.headers['token'];
+    if (token != null) {
+        jwt.verify(token, 'secreto', function(err, infoToken) {
+            if (err || (Date.now()/1000 - infoToken.tiempo) > 2400 ){ /* SOLO DURANTE LA FASE DE PRUEBAS*/
+                /*** Forbiden ***/
+                res.status(403);
+                res.json({
+                    acceso : false,
+                    error: 'Token invalido o caducado'
+                });
+                return;
+            } else {
+                res.usuario = infoToken.usuario;
+                next();
+            }
+        });
+    } else {
+        /*** Forbiden ***/
+        res.status(403);
+        res.json({
+            acceso : false,
+            mensaje: 'No hay Token'
+        });
+    }
+});
+
+/*** applying token route ***/
+app.use('/api/usuario', routerUsuarioToken);
+
 /*** session route - important ***/
 var routerUsuarioSession = express.Router();
 routerUsuarioSession.use(function(req, res, next) {
@@ -40,6 +77,8 @@ routerUsuarioSession.use(function(req, res, next) {
         res.redirect("/identificarse");
     }
 });
+
+/*** applying session route ***/
 app.use("/usuario",routerUsuarioSession);
 app.use("/amigo",routerUsuarioSession);
 
@@ -55,6 +94,7 @@ app.set('crypto',crypto);
 
 /*----------------------------------------- CONTROLLERS ------------------------------------------------------*/
 require("./routes/rusuarios.js")(app, swig, gestorBD);
+require("./routes/rapisocialnetwork.js")(app, gestorBD);
 
 
 
