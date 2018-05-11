@@ -119,8 +119,9 @@ module.exports = function (app, swig, gestorBD) {
         }
         gestorBD.obtenerUsuariosPg(criterioCount, criterio, pg, function (usuarios, total) {
             if (usuarios == null) {
-                res.send("Error al listar ");
-                /* ¿A DÓNDE DEBERÍA REDIRIGIR? */
+                res.redirect("/identificarse?mensaje=Error al obtener la lista de usuarios, intente iniciar " +
+                    "sesión otra vez&tipoMensaje"
+                    + "=alert-danger");
             } else {
                 var pgUltima = total / 5;
                 if (total % 5 > 0) {
@@ -149,8 +150,7 @@ module.exports = function (app, swig, gestorBD) {
         };
         gestorBD.obtenerPeticiones(criterio, function (peticiones) {
             if (peticiones == null) {
-                res.send("Error al enviar petición ");
-                /* ¿A DÓNDE DEBERÍA REDIRIGIR? */
+                res.redirect("/usuario?mensaje=Error al enviar la petición&tipoMensaje=alert-danger");
             } else {
                 if (peticiones[0] != null) {
                     if (peticiones[0] == true) {
@@ -169,8 +169,8 @@ module.exports = function (app, swig, gestorBD) {
                     };
                     gestorBD.insertarPeticion(peticion, function (id) {
                         if (id == null) {
-                            res.send("Error al enviar petición ");
-                            /* ¿A DÓNDE DEBERÍA REDIRIGIR? */
+                            res.redirect("/usuario?mensaje=No ha sido posible enviar la petición" +
+                                "correctamente&tipoMensaje=alert-danger");
                         } else {
                             res.redirect("/usuario?mensaje=Petición enviada con éxito");
                         }
@@ -194,8 +194,7 @@ module.exports = function (app, swig, gestorBD) {
         }
         gestorBD.obtenerAmigosPg(req.session.usuario, criterio, pg, function (amigos, total) {
             if (amigos == null) {
-                res.send("Error al listar amigos ");
-                /* ¿A DÓNDE DEBERÍA REDIRIGIR? */
+                res.redirect("/usuario?mensaje=Error al obtener la lista de amigos&tipoMensaje=alert-danger");
             } else {
                 var pgUltima = total / 5;
                 if (total % 5 > 0) {

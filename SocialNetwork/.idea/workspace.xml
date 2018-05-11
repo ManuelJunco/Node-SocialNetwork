@@ -14,38 +14,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="rusuarios.js" pinned="false" current-in-tab="false">
+      <file leaf-file-name="rusuarios.js" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/routes/rusuarios.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="256">
-              <caret line="189" column="10" lean-forward="true" selection-start-line="189" selection-start-column="10" selection-end-line="189" selection-end-column="10" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="home.html" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/views/home.html">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="102">
-              <caret line="6" column="25" lean-forward="true" selection-start-line="6" selection-start-column="25" selection-end-line="6" selection-end-column="25" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="friends.html" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/views/friends.html">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="192">
-              <caret line="40" lean-forward="true" selection-start-line="40" selection-end-line="40" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="gestorBD.js" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/modules/gestorBD.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="204">
-              <caret line="12" column="58" lean-forward="true" selection-start-line="12" selection-start-column="58" selection-end-line="12" selection-end-column="58" />
+            <state relative-caret-position="392">
+              <caret line="196" column="82" selection-start-line="196" selection-start-column="82" selection-end-line="196" selection-end-column="82" />
             </state>
           </provider>
         </entry>
@@ -67,6 +40,7 @@
       <find>sesi</find>
       <find>OR</find>
       <find>obtenerPeticiones</find>
+      <find>A DÓNDE DEBERÍA REDIRIGIR</find>
     </findStrings>
   </component>
   <component name="IdeDocumentHistory">
@@ -81,8 +55,8 @@
         <option value="$PROJECT_DIR$/views/home.html" />
         <option value="$PROJECT_DIR$/app.js" />
         <option value="$PROJECT_DIR$/views/friends.html" />
-        <option value="$PROJECT_DIR$/routes/rusuarios.js" />
         <option value="$PROJECT_DIR$/modules/gestorBD.js" />
+        <option value="$PROJECT_DIR$/routes/rusuarios.js" />
       </list>
     </option>
   </component>
@@ -102,7 +76,7 @@
       <path value="$PROJECT_DIR$/package.json" />
     </packageJsonPaths>
   </component>
-  <component name="ProjectFrameBounds" extendedState="7">
+  <component name="ProjectFrameBounds" extendedState="6">
     <option name="x" value="780" />
     <option name="width" value="1130" />
     <option name="height" value="1050" />
@@ -112,6 +86,7 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -122,7 +97,7 @@
             <path>
               <item name="SocialNetwork" type="b2602c69:ProjectViewProjectNode" />
               <item name="SocialNetwork" type="462c0819:PsiDirectoryNode" />
-              <item name="modules" type="462c0819:PsiDirectoryNode" />
+              <item name="routes" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="SocialNetwork" type="b2602c69:ProjectViewProjectNode" />
@@ -133,7 +108,6 @@
           <select />
         </subPane>
       </pane>
-      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -189,18 +163,19 @@
       <workItem from="1525763206361" duration="1741000" />
       <workItem from="1525787363009" duration="821000" />
       <workItem from="1525877592931" duration="5597000" />
-      <workItem from="1525933864805" duration="11550000" />
+      <workItem from="1525933864805" duration="12841000" />
+      <workItem from="1526021540319" duration="1735000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="41033000" />
+    <option name="totallyTimeSpent" value="44059000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-7" y="-7" width="1550" height="838" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="2" visible="true" weight="0.20423001" />
+      <window_info content_ui="combo" id="Project" order="2" visible="true" weight="0.20819564" />
       <window_info anchor="bottom" id="TODO" order="10" />
       <window_info anchor="bottom" id="Docker" order="0" show_stripe_button="false" />
       <window_info anchor="bottom" id="Event Log" order="2" side_tool="true" />
@@ -213,11 +188,11 @@
       <window_info anchor="bottom" id="Debug" order="7" weight="0.044159543" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="9" weight="0.4" />
-      <window_info anchor="bottom" id="Cvs" order="8" weight="0.25" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
-      <window_info anchor="bottom" id="Find" order="5" />
       <window_info anchor="bottom" id="Message" order="4" />
+      <window_info anchor="bottom" id="Cvs" order="8" weight="0.25" />
+      <window_info anchor="bottom" id="Find" order="5" />
     </layout>
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -232,6 +207,34 @@
     </breakpoint-manager>
   </component>
   <component name="editorHistoryManager">
+    <entry file="file://$PROJECT_DIR$/routes/rusuarios.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="3298">
+          <caret line="194" column="94" lean-forward="true" selection-start-line="194" selection-start-column="94" selection-end-line="194" selection-end-column="94" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/views/home.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="102">
+          <caret line="6" column="25" lean-forward="true" selection-start-line="6" selection-start-column="25" selection-end-line="6" selection-end-column="25" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/views/friends.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="680">
+          <caret line="40" lean-forward="true" selection-start-line="40" selection-end-line="40" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/modules/gestorBD.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="204">
+          <caret line="12" column="58" lean-forward="true" selection-start-line="12" selection-start-column="58" selection-end-line="12" selection-end-column="58" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/routes/rusuarios.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="2346">
@@ -392,13 +395,7 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/views/navbar.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <caret column="34" selection-start-column="34" selection-end-column="34" />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/views/navbar.html" />
     <entry file="file://$PROJECT_DIR$/views/base.html">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="357">
@@ -413,10 +410,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/views/home.html">
+    <entry file="file://$PROJECT_DIR$/modules/gestorBD.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="102">
-          <caret line="6" column="25" lean-forward="true" selection-start-line="6" selection-start-column="25" selection-end-line="6" selection-end-column="25" />
+        <state relative-caret-position="204">
+          <caret line="12" column="58" lean-forward="true" selection-start-line="12" selection-start-column="58" selection-end-line="12" selection-end-column="58" />
         </state>
       </provider>
     </entry>
@@ -427,17 +424,17 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/routes/rusuarios.js">
+    <entry file="file://$PROJECT_DIR$/views/home.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="256">
-          <caret line="189" column="10" lean-forward="true" selection-start-line="189" selection-start-column="10" selection-end-line="189" selection-end-column="10" />
+        <state relative-caret-position="17">
+          <caret line="6" column="25" selection-start-line="6" selection-start-column="25" selection-end-line="6" selection-end-column="25" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/modules/gestorBD.js">
+    <entry file="file://$PROJECT_DIR$/routes/rusuarios.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="204">
-          <caret line="12" column="58" lean-forward="true" selection-start-line="12" selection-start-column="58" selection-end-line="12" selection-end-column="58" />
+        <state relative-caret-position="392">
+          <caret line="196" column="82" selection-start-line="196" selection-start-column="82" selection-end-line="196" selection-end-column="82" />
         </state>
       </provider>
     </entry>
