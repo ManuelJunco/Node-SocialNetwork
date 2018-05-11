@@ -1,48 +1,43 @@
-module.exports = function (app, swig, gestorBD) {
+module.exports = function(app, swig, gestorBD) {
 
+	/* Return the login html */
+	app.get("/identificarse", function(req, res) {
+		var respuesta = swig.renderFile('views/login.html', {});
+		res.send(respuesta);
+	});
 
-    /* Return the login html */
-    app.get("/identificarse", function (req, res) {
-        var respuesta = swig.renderFile('views/login.html', {});
-        res.send(respuesta);
-    });
+	/* Return the signup html */
+	app.get("/registrarse", function(req, res) {
+		var respuesta = swig.renderFile('views/signup.html', {});
+		res.send(respuesta);
+	});
 
+	/* Disconnect the user */
+	app.get('/desconectarse', function(req, res) {
+		req.session.usuario = null;
+		res.redirect("/identificarse");
+	})
 
-    /* Return the signup html */
-    app.get("/registrarse", function (req, res) {
-        var respuesta = swig.renderFile('views/signup.html', {});
-        res.send(respuesta);
-    });
-
-
-    /* Disconnect the user */
-    app.get('/desconectarse', function (req, res) {
-        req.session.usuario = null;
-        res.redirect("/identificarse");
-    })
-
-
-    /* Receive the post req from login html */
-    app.post("/identificarse", function (req, res) {
-        var seguro = app.get("crypto").createHmac('sha256', app.get('clave'))
-            .update(req.body.password).digest('hex');
-        var criterio = {
-            email: req.body.email,
-            password: seguro
-        }
-        gestorBD.obtenerUsuarios(criterio, function (usuarios) {
-            if (usuarios == null || usuarios.length == 0) {
-                req.session.usuario = null;
-                res.redirect("/identificarse" +
-                    "?mensaje=Email o password incorrecto" +
-                    "&tipoMensaje=alert-danger ");
-            } else {
-                req.session.usuario = usuarios[0].email;
-                res.redirect("/usuario");
-            }
-        });
-    });
-
+	/* Receive the post req from login html */
+	app.post("/identificarse", function(req, res) {
+		var seguro = app.get("crypto").createHmac('sha256', app.get('clave'))
+				.update(req.body.password).digest('hex');
+		var criterio = {
+			email : req.body.email,
+			password : seguro
+		}
+		gestorBD.obtenerUsuarios(criterio, function(usuarios) {
+			if (usuarios == null || usuarios.length == 0) {
+				req.session.usuario = null;
+				res.redirect("/identificarse"
+						+ "?mensaje=Email o password incorrecto"
+						+ "&tipoMensaje=alert-danger ");
+			} else {
+				req.session.usuario = usuarios[0].email;
+				res.redirect("/usuario");
+			}
+		});
+	});
 
     /* Receive the post req from signup html */
     app.post("/registrarse", function (req, res) {
@@ -210,4 +205,60 @@ module.exports = function (app, swig, gestorBD) {
             }
         });
     });
+    
+    /* Shows the invitation page with the invitations list - Includes pagination */
+	app.get("/invitaciones", function(req, res) {
+		var criterio = {
+			$or : [ {
+				destino : req.session.usuario,
+				aceptada : false
+			} ]
+		};
+		var pg = parseInt(req.query.pg);
+		if (req.query.pg == null) {
+			pg = 1;
+		}
+		gestorBD.obtenerAmigosPg(req.session.usuario, criterio, pg, function(
+				peticiones, total) {
+			if (peticiones == null) {
+				res.send("Error al buscar peticiones ");
+				/* ¿A DÓNDE DEBERÍA REDIRIGIR? */
+			} else {
+				var pgUltima = total / 5;
+				if (total % 5 > 0) {
+					pgUltima = pgUltima + 1;
+				}
+				var respuesta = swig.renderFile('views/invitationList.html', {
+					peticiones : peticiones,
+					pgActual : pg,
+					pgUltima : pgUltima,
+				});
+				res.send(respuesta);
+			}
+		});
+	});
+
+    
+	/* A user sends a friend request to another */
+	app.post("/peticion/aceptar/:email", function(req, res) {
+		/* Check if the target is already on peticiones */
+		var criterio = {
+			$or : [ {
+				origen : req.session.usuario,
+				destino : req.params.email
+			}, {
+				destino : req.session.usuario,
+				origen : req.params.email
+			} ]
+		};
+		gestorBD.obtenerPeticiones(criterio, function(peticiones) {
+			if (peticiones == null) {
+				res.send("Error al enviar petición ");
+				/* ¿A DÓNDE DEBERÍA REDIRIGIR? */
+			} else {
+				/* gestorBD.aceptarPeticion(p) */
+			}
+		});
+	});
+
 };
