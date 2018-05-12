@@ -48,16 +48,23 @@ module.exports = function (app, gestorBD) {
                 })
             } else {
                 res.status(200);
-                var ids = [amigos.length];
                 for (var i in amigos) {
-                    ids[i] = amigos[i]["_id"];
+                    delete amigos[i]["nombre"];
+                    delete amigos[i]["email"];
+                    delete amigos[i]["password"];
                     /* HATEOAS principle
                    amigos[i].email = "/usuario/" + amigos[i].email;
                    amigos[i].nombre = "/usuario/" + amigos[i].nombre;
                    */
                }
-                res.send(JSON.stringify(ids));
+               res.send(JSON.stringify(amigos));
             }
         });
+    });
+
+
+    /* Obtain all the message from authenticated user to other user */
+    app.post("/api/mensaje/", function (req, res) {
+
     });
 }
