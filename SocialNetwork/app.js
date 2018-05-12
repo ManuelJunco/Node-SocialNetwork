@@ -41,7 +41,7 @@ routerUsuarioToken.use(function(req, res, next) {
     if (token != null) {
         jwt.verify(token, 'secreto', function(err, infoToken) {
             if (err || (Date.now()/1000 - infoToken.tiempo) > 2400 ){ /* SOLO DURANTE LA FASE DE PRUEBAS*/
-                /*** Forbiden ***/
+                /*** Forbidden ***/
                 res.status(403);
                 res.json({
                     acceso : false,
@@ -65,6 +65,7 @@ routerUsuarioToken.use(function(req, res, next) {
 
 /*** applying token route ***/
 app.use('/api/usuario', routerUsuarioToken);
+app.use('/api/mensaje',routerUsuarioToken);
 
 /*** session route - important ***/
 var routerUsuarioSession = express.Router();
