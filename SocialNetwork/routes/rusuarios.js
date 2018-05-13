@@ -240,25 +240,29 @@ module.exports = function(app, swig, gestorBD) {
 
     
 	/* A user sends a friend request to another */
-	app.post("/peticion/aceptar/:email", function(req, res) {
-		/* Check if the target is already on peticiones */
+	app.post("/peticion/aceptar/:email", function(req, res) {	
 		var criterio = {
-			$or : [ {
-				origen : req.session.usuario,
-				destino : req.params.email
-			}, {
-				destino : req.session.usuario,
-				origen : req.params.email
-			} ]
+				$or : [ {
+					origen : req.params.email,
+					destino : req.session.usuario,
+					aceptada : false
+				} ]
 		};
-		gestorBD.obtenerPeticiones(criterio, function(peticiones) {
-			if (peticiones == null) {
-				res.send("Error al enviar petición ");
-				/* ¿A DÓNDE DEBERÍA REDIRIGIR? */
+		
+		var peticion = {
+				origen : req.params.email,
+				destino : req.session.usuario,
+				aceptada : true
+		}
+		
+		gestorBD.aceptarPeticion(criterio, cancion, function (result){
+			if(result==null){
+				res.send("Error al aceptar");
 			} else {
-				/* gestorBD.aceptarPeticion(p) */
+				res.send("Aceptada");
 			}
-		});
+		})
+		
 	});
 
 };

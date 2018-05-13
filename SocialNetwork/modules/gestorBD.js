@@ -206,7 +206,7 @@ module.exports = {
 			if (err) {
 				funcionCallback(null);
 			} else {
-				var collection = db.collection('invitaciones');
+				var collection = db.collection('peticiones');
 				collection.count(criterioCount, function(err, count) {
 					collection.find(criterio).skip((pg - 1) * 5).limit(5)
 							.toArray(function(err, invitaciones) {
@@ -217,6 +217,23 @@ module.exports = {
 								}
 								db.close();
 							});
+				});
+			}
+		});
+	},
+	aceptarPeticion : function(criterio, peticion, funcionCallback){
+		this.mongo.MongoClient.connect(this.app.get('db'), function(err, db){
+			if(err){
+				funcionCallback(null);
+			} else {
+				var collection = db.collection('peticiones');
+				collection.update(criterio, {$set: cancion}, function(err, result){
+					if(err){
+						funcionCallback(null);
+					} else {
+						funcionCallback(result);
+					}
+					db.close();
 				});
 			}
 		});
