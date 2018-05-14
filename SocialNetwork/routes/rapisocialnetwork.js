@@ -58,11 +58,11 @@ module.exports = function (app, gestorBD) {
             } else {
                 /* OK */
                 res.status(200);
-                for (var i in amigos) {
+                /*for (var i in amigos) {
                     delete amigos[i]["nombre"];
                     delete amigos[i]["email"];
                     delete amigos[i]["password"];
-                }
+                }*/
                 res.send(JSON.stringify(amigos));
             }
         });

@@ -255,7 +255,7 @@ module.exports = function(app, swig, gestorBD) {
 				aceptada : true
 		}
 		
-		gestorBD.aceptarPeticion(criterio, cancion, function (result){
+		gestorBD.aceptarPeticion(criterio, peticion, function (result){
 			if(result==null){
 				res.send("Error al aceptar");
 			} else {
