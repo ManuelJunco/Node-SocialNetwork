@@ -43,29 +43,37 @@ module.exports = function (app, gestorBD) {
 
 
     /* Obtain the user's friends */
-    app.get("/api/usuario/amigo", function (req, res) {
-        var criterio = {
-            $or: [{origen: res.usuario, aceptada: true},
-                {destino: res.usuario, aceptada: true}]
-        }
-        gestorBD.obtenerAmigos(res.usuario, criterio, function (amigos) {
-            if (amigos == null) {
-                /* Internal server Error */
-                res.status(500);
-                res.json({
-                    error: "se ha producido un error"
-                })
-            } else {
-                /* OK */
-                res.status(200);
-                /*for (var i in amigos) {
-                    delete amigos[i]["nombre"];
-                    delete amigos[i]["email"];
-                    delete amigos[i]["password"];
-                }*/
-                res.send(JSON.stringify(amigos));
+    app.get("/api/usuario", function (req, res) {
+        if(req.query.amigoDe == res.usuario) {
+            var criterio = {
+                $or: [{origen: req.query.amigoDe, aceptada: true},
+                    {destino: req.query.amigoDe, aceptada: true}]
             }
-        });
+            gestorBD.obtenerAmigos(res.usuario, criterio, function (amigos) {
+                if (amigos == null) {
+                    /* Internal server Error */
+                    res.status(500);
+                    res.json({
+                        error: "se ha producido un error"
+                    })
+                } else {
+                    /* OK */
+                    res.status(200);
+                    for (var i in amigos) {
+                        /*delete amigos[i]["nombre"];
+                        delete amigos[i]["email"];*/
+                        delete amigos[i]["password"];
+                    }
+                    res.send(JSON.stringify(amigos));
+                }
+            });
+        } else {
+            /* Forbidden */
+            res.status(403);
+            res.json({
+                error: "Intento de acceso a una lista de amigos que no es tuya"
+            })
+        }
     });
 
 
@@ -120,11 +128,11 @@ module.exports = function (app, gestorBD) {
 
 
     /* Obtain the user's message  */
-    app.get("/api/mensaje/:id_user1/:id_user2", function (req, res) {
+    app.get("/api/mensaje", function (req, res) {
         /* Obtain the _id of the user authenticated */
         var criterio = {
-            $or: [{_id: gestorBD.mongo.ObjectID(req.params.id_user1)},
-                {_id: gestorBD.mongo.ObjectID(req.params.id_user2)}]
+            $or: [{_id: gestorBD.mongo.ObjectID(req.query.id_user1)},
+                {_id: gestorBD.mongo.ObjectID(req.query.id_user2)}]
         }
         gestorBD.obtenerUsuarios(criterio, function (usuarios) {
             if (usuarios == null) {
