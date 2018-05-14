@@ -148,7 +148,7 @@ module.exports = function(app, swig, gestorBD) {
                 res.redirect("/usuario?mensaje=Error al enviar la petición&tipoMensaje=alert-danger");
             } else {
                 if (peticiones[0] != null) {
-                    if (peticiones[0] == true) {
+                    if (peticiones[0].aceptada == true) {
                         res.redirect("/usuario?mensaje=Este usuario ya es tu amigo&"
                             + "tipoMensaje=alert-danger");
                     } else {
@@ -255,7 +255,7 @@ module.exports = function(app, swig, gestorBD) {
 				aceptada : true
 		}
 		
-		gestorBD.aceptarPeticion(criterio, cancion, function (result){
+		gestorBD.aceptarPeticion(criterio, peticion, function (result){
 			if(result==null){
 				res.send("Error al aceptar");
 			} else {
