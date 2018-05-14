@@ -91,7 +91,8 @@ routerUsuarioSession.use(function(req, res, next) {
 /*** applying session route ***/
 app.use("/usuario",routerUsuarioSession);
 app.use("/amigo",routerUsuarioSession);
-
+app.use("/peticion",routerUsuarioSession);
+app.use("/invitaciones",routerUsuarioSession);
 
 
 /*---------------------------------- GLOBAL VARIABLES - APP && OTHERS ----------------------------------------*/
