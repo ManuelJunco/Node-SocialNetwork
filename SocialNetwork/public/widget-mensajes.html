@@ -1,4 +1,5 @@
 <div id="widget-mensajes">
+	<h2 id=amigo></h2>
 	<button class="btn" onclick="cargarMensajes()">Actualizar</button>
 	<table class="table table-hover">
 		<thead>
@@ -28,7 +29,7 @@
 	var mensajes;
 	function cargarMensajes() {
 		$.ajax({
-			url : URLbase + "/mensaje/"+idAmigo"/"+ idAmigo,
+			url : URLbase + "/mensaje?user1="+idAmigo"&user2="+ idAmigo,
 			type : "GET",
 			data : {},
 			dataType : 'json',
@@ -36,6 +37,7 @@
 				"token" : token
 			},
 			success : function(respuesta) {
+				$("#amigo").text(nombreAmigo);
 				mensajes = respuesta;
 				actualizarMensajes(mensajes);
 			},
@@ -59,7 +61,7 @@
 			url : URLbase + "/mensaje",
 			type : "POST",
 			data : {
-				receptor: $("#receptor").text(),
+				receptor: emailAmigo,
 				texto : $("#enviar-mensaje").val()
 			},
 			dataType : 'json',
