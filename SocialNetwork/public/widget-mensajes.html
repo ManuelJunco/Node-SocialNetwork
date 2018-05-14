@@ -28,7 +28,7 @@
 	var mensajes;
 	function cargarMensajes() {
 		$.ajax({
-			url : URLbase + "/mensaje/" + idAmigo,
+			url : URLbase + "/mensaje/"+idAmigo"/"+ idAmigo,
 			type : "GET",
 			data : {},
 			dataType : 'json',
@@ -59,7 +59,7 @@
 			url : URLbase + "/mensaje",
 			type : "POST",
 			data : {
-				receptor : idAmigo,
+				receptor: $("#receptor").text(),
 				texto : $("#enviar-mensaje").val()
 			},
 			dataType : 'json',
@@ -79,7 +79,7 @@
 	
 	setInterval(function() {
 		cargarMensajes();
-	}, 5000);
+	}, 1000);
 	
 	cargarMensajes();
 </script>
