@@ -1,24 +1,7 @@
-{% extends "base.html" %} {% block titulo %} Usuarios de la aplicación
+{% extends "base.html" %} {% block titulo %} Lista de invitaciones
 {% endblock %} {% block nav_bar_right %}
 <li id="desconectarse"><a href="/desconectarse">Desconectarse</a></li>
 {% endblock %} {% block contenido_principal %}
-<!-- Búsqueda -->
-<div class="row">
-	<div id="custom-search-input ">
-		<form method="get" action="/usuario">
-			<div
-				class="input-group col-xs-8 col-sm-6 col-md-4 col-lg-5 pull-right">
-				<input type="text" class="search-query form-control"
-					placeholder="nombre o email" name="busqueda" /> <span
-					class="input-group-btn">
-					<button class="btn" type="submit">
-						<span class="glyphicon glyphicon-search"></span>
-					</button>
-				</span>
-			</div>
-		</form>
-	</div>
-</div>
 
 <!-- Invitations -->
 <div class="table-responsive">
@@ -49,28 +32,28 @@
 	<ul class="pagination">
 		<!-- Primera -->
 		<li class="page-item"><a class="page-link"
-			href="/invitaciones?pg=1&busqueda={{search}}">Primera</a></li>
+			href="/invitaciones?pg=1">Primera</a></li>
 
 		<!-- Anterior (si la hay ) -->
 		{% if pgActual-1 >= 1 %}
 		<li class="page-item"><a class="page-link"
-			href="/invitaciones?pg={{ pgActual -1 }}&busqueda={{search}}">{{
+			href="/invitaciones?pg={{ pgActual -1 }}">{{
 				pgActual -1 }}</a></li> {% endif %}
 
 		<!-- Actual -->
 		<li class="page-item active"><a class="page-link"
-			href="/invitaciones?pg={{ pgActual }}&busqueda={{search}}">{{ pgActual
+			href="/invitaciones?pg={{ pgActual }}">{{ pgActual
 				}}</a></li>
 
 		<!-- Siguiente (si la hay) -->
 		{% if pgActual+1 <= pgUltima %}
 		<li class="page-item"><a class="page-link"
-			href="/invitaciones?pg={{ pgActual+1 }}&busqueda={{search}}">{{
+			href="/invitaciones?pg={{ pgActual+1 }}">{{
 				pgActual+1 }}</a></li> {% endif %}
 
 		<!-- Última -->
 		<li class="page-item"><a class="page-link"
-			href="/invitaciones?pg={{ pgUltima }}&busqueda={{search}}">Última</a></li>
+			href="/invitaciones?pg={{ pgUltima }}">Última</a></li>
 	</ul>
 </div>
 {% endblock %}

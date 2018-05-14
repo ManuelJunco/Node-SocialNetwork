@@ -171,4 +171,43 @@ module.exports = function (app, gestorBD) {
             }
         });
     });
+
+
+    /* Change one attribute of message */
+    app.put("/api/mensaje/:id/", function (req, res) {
+        /* Find the message */
+        var criterio = {
+            _id: gestorBD.mongo.ObjectID(req.params.id)
+        }
+        gestorBD.obtenerMensajes(criterio, function (mensajes) {
+            if (mensajes == null) {
+                /* Internal server Error */
+                res.status(500);
+                res.json({
+                    error: "se ha producido un error"
+                })
+            } else {
+                /* Verify that the user is a sender */
+                if(mensajes[0].receptor == res.usuario){
+                    var mensaje = {
+                        leido : true
+                    }
+                    gestorBD.modificarMensaje(criterio, mensaje, function (result) {
+                        if (result == null) {
+                            res.status(500);
+                            res.json({
+                                error: "se ha producido un error"
+                            })
+                        } else {
+                            res.status(200);
+                            res.json({
+                                mensaje: "mensaje modificado",
+                                _id: req.params.id
+                            })
+                        }
+                    });
+                }
+            }
+        });
+    });
 }
