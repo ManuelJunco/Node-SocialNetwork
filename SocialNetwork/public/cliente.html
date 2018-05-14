@@ -21,9 +21,6 @@
       <img src="/img/logo.png" alt="logo"/> 
     </div>
     <div class="collapse navbar-collapse" id="myNavbar">
-      <ul class="nav navbar-nav" id="barra-menu">
-        <li><a onclick=widgetCanciones()>Canciones</a></li>
-      </ul>
       <ul class="nav navbar-nav navbar-right" id="barra-menu-derecha">
 		<!-- Opciones de menú aqui -->
       </ul>
@@ -36,6 +33,13 @@
 <div class="container" id="contenedor-principal"> <!--  id para identificar -->
 
 </div>
+
+<script>
+	var token;
+	var URLbase = "http://localhost:8081/api";
+	$( "#contenedor-principal" ).load( "widget-login.html");
+</script>
+
 
 </body>
 </html>
