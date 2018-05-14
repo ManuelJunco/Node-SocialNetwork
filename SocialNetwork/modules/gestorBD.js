@@ -227,7 +227,7 @@ module.exports = {
 				funcionCallback(null);
 			} else {
 				var collection = db.collection('peticiones');
-				collection.update(criterio, {$set: cancion}, function(err, result){
+				collection.update(criterio, {$set: peticion}, function(err, result){
 					if(err){
 						funcionCallback(null);
 					} else {
