@@ -82,47 +82,60 @@ module.exports = function (app, gestorBD) {
     app.post("/api/mensaje/", function (req, res) {
         /* Check if they are friends */
         var criterio = {
-            $or: [{origen: res.usuario, destino: req.body.receptor, aceptada: true},
-                {origen: req.body.receptor, destino: res.usuario, aceptada: true}]
-        };
-        gestorBD.obtenerAmigos(res.usuario, criterio, function (amigos) {
-            if (amigos == null) {
+            _id: gestorBD.mongo.ObjectID(req.body.receptor)
+        }
+        gestorBD.obtenerUsuarios(criterio, function (usuarios) {
+            if (usuarios == null) {
                 /* Internal server Error */
                 res.status(500);
                 res.json({
                     error: "se ha producido un error"
                 })
             } else {
-                if (amigos.length == 0) {
-                    /* Bad request */
-                    res.status(400);
-                    res.json({
-                        error: "los usuarios no son amigos"
-                    })
-                } else {
-                    var mensaje = {
-                        emisor: res.usuario,
-                        receptor: req.body.receptor,
-                        texto: req.body.texto,
-                        leido: false
-                    };
-                    gestorBD.insertarMensaje(mensaje, function (id) {
-                        if (id == null) {
-                            /* Internal server Error */
-                            res.status(500);
+                var criterio = {
+                    $or: [{origen: res.usuario, destino: usuarios[0].email, aceptada: true},
+                        {origen: usuarios[0].email, destino: res.usuario, aceptada: true}]
+                };
+                gestorBD.obtenerAmigos(res.usuario, criterio, function (amigos) {
+                    if (amigos == null) {
+                        /* Internal server Error */
+                        res.status(500);
+                        res.json({
+                            error: "se ha producido un error"
+                        })
+                    } else {
+                        if (amigos.length == 0) {
+                            /* Bad request */
+                            res.status(400);
                             res.json({
-                                error: "se ha producido un error"
+                                error: "los usuarios no son amigos"
                             })
                         } else {
-                            /* Created */
-                            res.status(201);
-                            res.json({
-                                mensaje: "mensaje insertado",
-                                _id: id
-                            })
+                            var mensaje = {
+                                emisor: res.usuario,
+                                receptor: req.body.receptor,
+                                texto: req.body.texto,
+                                leido: false
+                            };
+                            gestorBD.insertarMensaje(mensaje, function (id) {
+                                if (id == null) {
+                                    /* Internal server Error */
+                                    res.status(500);
+                                    res.json({
+                                        error: "se ha producido un error"
+                                    })
+                                } else {
+                                    /* Created */
+                                    res.status(201);
+                                    res.json({
+                                        mensaje: "mensaje insertado",
+                                        _id: id
+                                    })
+                                }
+                            });
                         }
-                    });
-                }
+                    }
+                });
             }
         });
     });
@@ -130,7 +143,7 @@ module.exports = function (app, gestorBD) {
 
     /* Obtain the user's message  */
     app.get("/api/mensaje", function (req, res) {
-    	/* Obtain the _id of the user authenticated */
+        /* Obtain the _id of the user authenticated */
         var criterio = {
             _id: gestorBD.mongo.ObjectID(req.query.id_user)
         }
