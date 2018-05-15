@@ -143,36 +143,22 @@ module.exports = function (app, gestorBD) {
 
     /* Obtain the user's message  */
     app.get("/api/mensaje", function (req, res) {
-        /* Obtain the _id of the user authenticated */
+        /* Find the message */
         var criterio = {
-            _id: gestorBD.mongo.ObjectID(req.query.id_user)
+            $or: [{emisor: req.query.email_user, receptor: res.usuario},
+                {emisor: res.usuario, receptor: req.query.email_user}]
         }
-        gestorBD.obtenerUsuarios(criterio, function (usuarios) {
-            if (usuarios == null) {
+        gestorBD.obtenerMensajes(criterio, function (mensajes) {
+            if (mensajes == null) {
                 /* Internal server Error */
                 res.status(500);
                 res.json({
                     error: "se ha producido un error"
                 })
             } else {
-                /* Find the message */
-                criterio = {
-                    $or: [{emisor: usuarios[0].email, receptor: res.usuario},
-                        {emisor: res.usuario, receptor: usuarios[0].email}]
-                }
-                gestorBD.obtenerMensajes(criterio, function (mensajes) {
-                    if (mensajes == null) {
-                        /* Internal server Error */
-                        res.status(500);
-                        res.json({
-                            error: "se ha producido un error"
-                        })
-                    } else {
-                        /* OK */
-                        res.status(200);
-                        res.send(JSON.stringify(mensajes));
-                    }
-                });
+                /* OK */
+                res.status(200);
+                res.send(JSON.stringify(mensajes));
             }
         });
     });
