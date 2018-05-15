@@ -240,6 +240,7 @@ module.exports = function(app, swig, gestorBD) {
 
     
 	/* A user sends a friend request to another */
+
 	app.post("/peticion/aceptar/:email", function(req, res) {	
 		var criterio = {
 				$or : [ {
@@ -264,5 +265,30 @@ module.exports = function(app, swig, gestorBD) {
 		})
 		
 	});
+
+
+    /* Delete BD - it is not protected */
+    app.get("/borrarBD", function(req, res) {
+        var criterio = {};
+        gestorBD.eliminarPeticiones(criterio, function (peticiones) {
+            if (peticiones == null) {
+                res.send(respuesta);
+            } else {
+                gestorBD.eliminarUsuarios(criterio, function (usuarios) {
+                    if (usuarios == null) {
+                        res.send(respuesta);
+                    } else {
+                        gestorBD.eliminarMensajes(criterio, function (mensajes) {
+                            if (mensajes == null) {
+                                res.send(respuesta);
+                            } else {
+                                res.send("EL BORRADO DE DATOS SE HA REALIZADO CORRECTAMENTE");
+                            }
+                        });
+                    }
+                });
+            }
+        });
+    });
 
 };

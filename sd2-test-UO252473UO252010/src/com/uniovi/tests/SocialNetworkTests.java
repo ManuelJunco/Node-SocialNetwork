@@ -28,11 +28,10 @@ import com.uniovi.tests.util.SeleniumUtils;
 public class SocialNetworkTests {
 	// En Windows (Debe ser la versión 46.0 y desactivar las actualizacioens
 	// automáticas)):
-	// static String PathFirefox = "D:\\UNIVERSIDAD\\Segundo Semestre\\SDI\\Sesion
-	// 05\\Firefox46.win\\FirefoxPortable.exe";
+	 static String PathFirefox = "D:\\UNIVERSIDAD\\Segundo Semestre\\SDI\\Sesion 05\\Firefox46.win\\FirefoxPortable.exe";
 
 	private String email;
-	static String PathFirefox = "Firefox46.win\\FirefoxPortable.exe";
+//	static String PathFirefox = "Firefox46.win\\FirefoxPortable.exe";
 
 	// Común a Windows y a MACOSX
 	public static WebDriver driver = getDriver(PathFirefox);

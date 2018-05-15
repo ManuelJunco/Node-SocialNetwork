@@ -99,7 +99,11 @@
       <path value="$PROJECT_DIR$/package.json" />
     </packageJsonPaths>
   </component>
+<<<<<<< HEAD
   <component name="ProjectFrameBounds" extendedState="7">
+=======
+  <component name="ProjectFrameBounds" extendedState="6">
+>>>>>>> pruebasFran
     <option name="x" value="780" />
     <option name="width" value="1130" />
     <option name="height" value="1050" />
