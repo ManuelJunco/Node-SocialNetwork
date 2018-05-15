@@ -236,4 +236,23 @@ public class SocialNetworkTests {
 		assertTrue(elementos.size() == 2);
 	}
 
+	
+	// CInVal Inicio de sesión con datos válidos
+	@Test
+	public void PRC1_1CInVal() {
+		driver.navigate().to("http://localhost:8081/cliente.html");
+		PO_LoginView.fillForm(driver, "prueba1@prueba1.com", "prueba1");
+		PO_LoginView.checkElement(driver, "text", "Bienvenido");
+	}
+
+	// CInInVal Inicio de sesión con datos inválidos (usuario no existente en
+	// la aplicación).
+	@Test
+	public void PRC1_2CInInVal() {
+		driver.navigate().to("http://localhost:8081/cliente.html");
+		PO_LoginView.fillForm(driver, "pedro@uniovi.es", "123456789");
+		PO_LoginView.checkElement(driver, "text", "Usuario no encontrado. Usuario o email incorrectos.");
+	}
+	
+	
 }
