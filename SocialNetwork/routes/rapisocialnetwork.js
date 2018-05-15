@@ -113,7 +113,7 @@ module.exports = function (app, gestorBD) {
                         } else {
                             var mensaje = {
                                 emisor: res.usuario,
-                                receptor: req.body.receptor,
+                                receptor: usuarios[0].email,
                                 texto: req.body.texto,
                                 leido: false
                             };
