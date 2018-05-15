@@ -164,7 +164,7 @@ public class SocialNetworkTests {
 	@Test
 	public void P05_1InvVal() {
 		PO_LoginView.fillForm(driver, "prueba1@prueba1.com", "prueba1");
-		List<WebElement> boton = PO_View.checkElement(driver, "text", "prueba4@prueba4.com");
+		List<WebElement> boton = PO_View.checkElement(driver, "id", "prueba4@prueba4.com");
 		boton.get(0).click();
 		SeleniumUtils.textoPresentePagina(driver, "Petición enviada con éxito");
 	}
@@ -177,7 +177,7 @@ public class SocialNetworkTests {
 	@Test
 	public void P05_2InvInVal() {
 		PO_LoginView.fillForm(driver, "prueba1@prueba1.com", "prueba1");
-		List<WebElement> boton = PO_View.checkElement(driver, "text", "prueba4@prueba4.com");
+		List<WebElement> boton = PO_View.checkElement(driver, "id", "prueba4@prueba4.com");
 		boton.get(0).click();
 		SeleniumUtils.textoPresentePagina(driver,
 				"Esta petición ya ha sido enviada o quizás deberías ver tu lista de peticiones recibidas");
@@ -233,7 +233,7 @@ public class SocialNetworkTests {
 		elementos = PO_View.checkElement(driver, "free", "//a[contains(@href, 'amigo')]");
 		elementos.get(0).click();
 		elementos = SeleniumUtils.EsperaCargaPagina(driver, "free", "//tbody/tr", PO_View.getTimeout());
-		assertTrue(elementos.size() == 2);
+		assertTrue(elementos.size() == 3);
 	}
 
 	

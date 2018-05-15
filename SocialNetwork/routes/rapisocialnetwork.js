@@ -130,7 +130,7 @@ module.exports = function (app, gestorBD) {
 
     /* Obtain the user's message  */
     app.get("/api/mensaje", function (req, res) {
-        /* Obtain the _id of the user authenticated */
+    	/* Obtain the _id of the user authenticated */
         var criterio = {
             $or: [{_id: gestorBD.mongo.ObjectID(req.query.id_user1)},
                 {_id: gestorBD.mongo.ObjectID(req.query.id_user2)}]

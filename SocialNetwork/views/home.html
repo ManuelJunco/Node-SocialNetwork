@@ -43,7 +43,7 @@
                 <td name="email">{{ usuario.email }}</td>
                 {% if usuario.email != me %}
                 <td>
-                    <button type="submit" class="btn btn-primary">Enviar</button>
+                    <button type="submit" class="btn btn-primary" id={{usuario.email}}>Enviar</button>
                 </td>
                 {% endif %}
             </form>
