@@ -210,7 +210,7 @@ public class SocialNetworkTests {
 		elementos = PO_View.checkElement(driver, "free", "//a[contains(@href, 'invitaciones')]");
 		elementos.get(0).click();
 		// aceptamos la invitacion
-		List<WebElement> boton = PO_View.checkElement(driver, "text", "prueba1@prueba1.com");
+		List<WebElement> boton = PO_View.checkElement(driver, "id", "Prueba1");
 		boton.get(0).click();
 		// Ahora vamos a comprobar que se añadio el amigo
 		elementos = PO_View.checkElement(driver, "free", "//li[contains(@id, 'listaAmigos')]/a");

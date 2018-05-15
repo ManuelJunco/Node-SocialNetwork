@@ -221,7 +221,7 @@ module.exports = function(app, swig, gestorBD) {
 		gestorBD.obtenerAmigosPg(req.session.usuario, criterio, pg, function(
 				peticiones, total) {
 			if (peticiones == null) {
-				res.send("Error al buscar peticiones ");
+				res.redirect("/usuario?mensaje=Error al buscar peticiones&tipoMensaje=alert-danger");
 				/* ¿A DÓNDE DEBERÍA REDIRIGIR? */
 			} else {
 				var pgUltima = total / 5;
@@ -257,9 +257,9 @@ module.exports = function(app, swig, gestorBD) {
 		
 		gestorBD.aceptarPeticion(criterio, peticion, function (result){
 			if(result==null){
-				res.send("Error al aceptar");
+				res.redirect("/usuario?mensaje=Error al aceptar petición&tipoMensaje=alert-danger");
 			} else {
-				res.send("Aceptada");
+				res.send(result);
 			}
 		})
 		
