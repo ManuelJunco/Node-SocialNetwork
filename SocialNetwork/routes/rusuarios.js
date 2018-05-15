@@ -240,29 +240,53 @@ module.exports = function(app, swig, gestorBD) {
 
     
 	/* A user sends a friend request to another */
-	app.post("/peticion/aceptar/:email", function(req, res) {	
-		var criterio = {
-				$or : [ {
-					origen : req.params.email,
-					destino : req.session.usuario,
-					aceptada : false
-				} ]
-		};
-		
-		var peticion = {
-				origen : req.params.email,
-				destino : req.session.usuario,
-				aceptada : true
-		}
-		
-		gestorBD.aceptarPeticion(criterio, peticion, function (result){
-			if(result==null){
-				res.send("Error al aceptar");
-			} else {
-				res.send("Aceptada");
-			}
-		})
-		
-	});
+    app.post("/peticion/aceptar/:email", function(req, res) {
+        var criterio = {
+            $or : [ {
+                origen : req.params.email,
+                destino : req.session.usuario,
+                aceptada : false
+            } ]
+        };
+
+        var peticion = {
+            origen : req.params.email,
+            destino : req.session.usuario,
+            aceptada : true
+        }
+
+        gestorBD.aceptarPeticion(criterio, peticion, function (result){
+            if(result==null){
+                res.send("Error al aceptar");
+            } else {
+                res.send("Aceptada");
+            }
+        })
+    });
+
+
+    /* Delete BD - it is not protected */
+    app.get("/borrarBD", function(req, res) {
+        var criterio = {};
+        gestorBD.eliminarPeticiones(criterio, function (peticiones) {
+            if (peticiones == null) {
+                res.send(respuesta);
+            } else {
+                gestorBD.eliminarUsuarios(criterio, function (usuarios) {
+                    if (usuarios == null) {
+                        res.send(respuesta);
+                    } else {
+                        gestorBD.eliminarMensajes(criterio, function (mensajes) {
+                            if (mensajes == null) {
+                                res.send(respuesta);
+                            } else {
+                                res.send("EL BORRADO DE DATOS SE HA REALIZADO CORRECTAMENTE");
+                            }
+                        });
+                    }
+                });
+            }
+        });
+    });
 
 };

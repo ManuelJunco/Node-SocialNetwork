@@ -45,7 +45,7 @@ module.exports = function (app, gestorBD) {
 
     /* Obtain the user's friends */
     app.get("/api/usuario", function (req, res) {
-        if(req.query.amigoDe == res.usuario) {
+        if (req.query.amigoDe == res.usuario) {
             var criterio = {
                 $or: [{origen: req.query.amigoDe, aceptada: true},
                     {destino: req.query.amigoDe, aceptada: true}]
@@ -132,8 +132,7 @@ module.exports = function (app, gestorBD) {
     app.get("/api/mensaje", function (req, res) {
         /* Obtain the _id of the user authenticated */
         var criterio = {
-            $or: [{_id: gestorBD.mongo.ObjectID(req.query.id_user1)},
-                {_id: gestorBD.mongo.ObjectID(req.query.id_user2)}]
+            _id: gestorBD.mongo.ObjectID(req.query.id_user)
         }
         gestorBD.obtenerUsuarios(criterio, function (usuarios) {
             if (usuarios == null) {
@@ -143,40 +142,24 @@ module.exports = function (app, gestorBD) {
                     error: "se ha producido un error"
                 })
             } else {
-                /* Check if appears in one params */
-                if(usuarios.length == 2) {
-                    if (res.usuario == usuarios[0].email || res.usuario == usuarios[1].email) {
-                        criterio = {
-                            $or: [{emisor: usuarios[0].email, receptor: usuarios[1].email},
-                                {emisor: usuarios[1].email, receptor: usuarios[0].email}]
-                        }
-                        gestorBD.obtenerMensajes(criterio, function (mensajes) {
-                            if (mensajes == null) {
-                                /* Internal server Error */
-                                res.status(500);
-                                res.json({
-                                    error: "se ha producido un error"
-                                })
-                            } else {
-                                /* OK */
-                                res.status(200);
-                                res.send(JSON.stringify(mensajes));
-                            }
-                        });
-                    } else {
-                        /* Bad request */
-                        res.status(400);
-                        res.json({
-                            error: "el emisor o el receptor debe ser el usuario autenticado"
-                        })
-                    }
-                } else {
-                    /* Internal server Error */
-                    res.status(500);
-                    res.json({
-                        error: "se ha producido un error"
-                    })
+                /* Find the message */
+                criterio = {
+                    $or: [{emisor: usuarios[0].email, receptor: res.usuario},
+                        {emisor: res.usuario, receptor: usuarios[0].email}]
                 }
+                gestorBD.obtenerMensajes(criterio, function (mensajes) {
+                    if (mensajes == null) {
+                        /* Internal server Error */
+                        res.status(500);
+                        res.json({
+                            error: "se ha producido un error"
+                        })
+                    } else {
+                        /* OK */
+                        res.status(200);
+                        res.send(JSON.stringify(mensajes));
+                    }
+                });
             }
         });
     });
@@ -197,9 +180,9 @@ module.exports = function (app, gestorBD) {
                 })
             } else {
                 /* Verify that the user is a sender */
-                if(mensajes[0].receptor == res.usuario){
+                if (mensajes[0].receptor == res.usuario) {
                     var mensaje = {
-                        leido : true
+                        leido: true
                     }
                     gestorBD.modificarMensaje(criterio, mensaje, function (result) {
                         if (result == null) {
@@ -219,4 +202,6 @@ module.exports = function (app, gestorBD) {
             }
         });
     });
+
+
 }
