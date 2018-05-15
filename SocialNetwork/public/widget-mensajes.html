@@ -2,18 +2,18 @@
 	  <table class="table table-hover">
         <thead>
         <tr>
-            <th>Chat</th>
+            <th>Chat: <span id="receptor"></span></th>
         </tr>
         </thead>
         <tbody id="tablaCuerpo">
         </tbody>
     </table>
-	<div id="enviar-mensaje">
+	<div class="form-horizontal">
 		<div class="form-group">
 			<label class="control-label col-sm-2" for="enviar-mensaje">Mensaje:</label>
 			<div class="col-sm-10">
 				<input type="text" class="form-control" name="enviar-mensaje"
-					placeholder="Nuevo mensaje" id="enviar-mensaje" />
+					placeholder="Nuevo mensaje" id="enviar-mensaje" required="true" />
 			</div>
 		</div>
 		<div class="col-sm-offset-2 col-sm-10">
@@ -26,7 +26,7 @@
 	var mensajes;
 	function cargarMensajes() {
 		$.ajax({
-			url : URLbase + "/mensaje?user1="+usuario+"&user2="+ idAmigo,
+			url : URLbase + "/mensaje?email_user="+ $("#receptor").text(),
 			type : "GET",
 			data : {},
 			dataType : 'json',
@@ -43,7 +43,7 @@
 		});
 	}
 
-	function actualizarTabla(mensajes) {
+	function actualizarMensajes(mensajes) {
 		$("#tablaCuerpo").empty(); // Vaciar la tabla
 		for (i = 0; i < mensajes.length; i++) {
 			$("#tablaCuerpo").append(
@@ -57,7 +57,7 @@
 			url : URLbase + "/mensaje",
 			type : "POST",
 			data : {
-				receptor: emailAmigo,
+				receptor: $("#receptor").text(),
 				texto : $("#enviar-mensaje").val()
 			},
 			dataType : 'json',
@@ -65,7 +65,7 @@
 				"token" : token
 			},
 			success : function(respuesta) {
-				console.log(respuesta); // <-- Prueba
+				$("#textoMensaje").val('');
 				cargarMensajes();
 
 			},
@@ -77,7 +77,7 @@
 	
 	setInterval(function() {
 		cargarMensajes();
-	}, 34000);
+	}, 1000);
 	
 	cargarMensajes();
 </script>
