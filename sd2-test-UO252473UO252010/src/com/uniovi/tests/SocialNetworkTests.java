@@ -11,7 +11,6 @@ import org.junit.BeforeClass;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runners.MethodSorters;
-import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.firefox.FirefoxDriver;
@@ -19,10 +18,7 @@ import org.openqa.selenium.firefox.FirefoxDriver;
 import com.uniovi.tests.pageobjects.PO_HomeView;
 import com.uniovi.tests.pageobjects.PO_ListView;
 import com.uniovi.tests.pageobjects.PO_LoginView;
-import com.uniovi.tests.pageobjects.PO_NavView;
-import com.uniovi.tests.pageobjects.PO_PrivateView;
-import com.uniovi.tests.pageobjects.PO_Properties;
-import com.uniovi.tests.pageobjects.PO_PublicationView;
+import com.uniovi.tests.pageobjects.PO_MessageView;
 import com.uniovi.tests.pageobjects.PO_RegisterView;
 import com.uniovi.tests.pageobjects.PO_View;
 import com.uniovi.tests.util.SeleniumUtils;
@@ -236,7 +232,6 @@ public class SocialNetworkTests {
 		assertTrue(elementos.size() == 3);
 	}
 
-	
 	// CInVal Inicio de sesión con datos válidos
 	@Test
 	public void PRC1_1CInVal() {
@@ -253,6 +248,69 @@ public class SocialNetworkTests {
 		PO_LoginView.fillForm(driver, "pedro@uniovi.es", "123456789");
 		PO_LoginView.checkElement(driver, "text", "Usuario no encontrado. Usuario o email incorrectos.");
 	}
-	
-	
+
+	// CListAmiVal Acceder a la lista de amigos de un usuario, que al menos
+	// tenga tres amigos.
+	@Test
+	public void PRC2_1CListAmiVal() {
+		driver.navigate().to("http://localhost:8081/cliente.html");
+		PO_LoginView.fillForm(driver, "prueba1@prueba1.com", "prueba1");
+		PO_LoginView.checkElement(driver, "text", "Bienvenido");
+		// Contamos que tiene 3 amigos
+		List<WebElement> filas = PO_View.checkElement(driver, "free", "//tbody/tr");
+		assertTrue(filas.size() >= 3);
+	}
+
+	// CListAmiFil Acceder a la lista de amigos de un usuario, y realizar un
+	// filtrado para encontrar a un
+	// amigo concreto, el nombre a buscar debe coincidir con el de un amigo.
+	@Test
+	public void PRC2_2CListAmiFil() {
+		driver.navigate().to("http://localhost:8081/cliente.html");
+		PO_LoginView.fillForm(driver, "prueba1@prueba1.com", "prueba1");
+		PO_LoginView.checkElement(driver, "text", "Bienvenido");
+		PO_ListView.search(driver, "prueba2");
+		SeleniumUtils.textoPresentePagina(driver, "prueba2");
+	}
+
+	// CListMenVal Acceder a la lista de mensajes de un amigo “chat”, la
+	// lista debe contener al menos
+	// tres mensajes.
+	@Test
+	public void PRC3_1CListMenVal() {
+		driver.navigate().to("http://localhost:8081/cliente.html");
+		PO_LoginView.fillForm(driver, "prueba1@prueba1.com", "prueba1");
+		PO_LoginView.checkElement(driver, "text", "Bienvenido");
+
+		List<WebElement> elementos = PO_View.checkElement(driver, "text", "prueba2");
+		elementos.get(0).click();
+
+		// Enviamos 3 mensajes
+		PO_MessageView.sendMessage(driver, "Hola");
+		PO_MessageView.sendMessage(driver, "Caracola");
+		PO_MessageView.sendMessage(driver, "No me dejes en leido :(");
+
+		// Comprobamos que hay 3 mensajes
+		List<WebElement> mensajes = PO_View.checkElement(driver, "free", "//tbody/tr");
+		assertTrue(mensajes.size() == 3);
+	}
+
+	// CCrearMenVal Acceder a la lista de mensajes de un amigo “chat” y crear
+	// un nuevo mensaje,
+	// validar que el mensaje aparece en la lista de mensajes.
+	@Test
+	public void PRC4_1CCrearMenVal() {
+		driver.navigate().to("http://localhost:8081/cliente.html");
+		PO_LoginView.fillForm(driver, "prueba1@prueba1.com", "prueba1");
+		PO_LoginView.checkElement(driver, "text", "Bienvenido");
+
+		List<WebElement> elementos = PO_View.checkElement(driver, "text", "prueba2");
+		elementos.get(0).click();
+		
+		//Enviamos nuevo mensaje
+		PO_MessageView.sendMessage(driver, "Adios");
+		//comprobamos que aparece el nuevo mensaje
+		PO_View.checkElement(driver, "text", "Adios");
+
+	}
 }
