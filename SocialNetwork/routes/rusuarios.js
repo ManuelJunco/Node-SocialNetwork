@@ -260,7 +260,7 @@ module.exports = function(app, swig, gestorBD) {
 			if(result==null){
 				res.redirect("/usuario?mensaje=Error al aceptar petición&tipoMensaje=alert-danger");
 			} else {
-				res.send(result);
+				res.redirect("/identificarse?mensaje=Petición aceptada");
 			}
 		})
 		
