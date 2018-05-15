@@ -16,6 +16,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.firefox.FirefoxDriver;
 
+import com.uniovi.tests.pageobjects.PO_HomeView;
 import com.uniovi.tests.pageobjects.PO_ListView;
 import com.uniovi.tests.pageobjects.PO_LoginView;
 import com.uniovi.tests.pageobjects.PO_NavView;
@@ -31,7 +32,8 @@ import com.uniovi.tests.util.SeleniumUtils;
 public class SocialNetworkTests {
 	// En Windows (Debe ser la versión 46.0 y desactivar las actualizacioens
 	// automáticas)):
-//	 static String PathFirefox = "D:\\UNIVERSIDAD\\Segundo Semestre\\SDI\\Sesion 05\\Firefox46.win\\FirefoxPortable.exe";
+	// static String PathFirefox = "D:\\UNIVERSIDAD\\Segundo Semestre\\SDI\\Sesion
+	// 05\\Firefox46.win\\FirefoxPortable.exe";
 
 	private String email;
 	static String PathFirefox = "Firefox46.win\\FirefoxPortable.exe";
@@ -77,14 +79,14 @@ public class SocialNetworkTests {
 	@Test
 	public void P01_1RegVal() {
 		// Vamos al formulario de registro
-		PO_NavView.clickOption(driver, "signup", "class", "btn btn-primary");
+		PO_HomeView.clickOption(driver, "registrarse", "class", "btn btn-primary");
 		// Rellenamos el formulario.
-		int num =0 + (int)(Math.random() * ((10000 - 0) + 1));
-		email = "josefoperez"+num+"@gmail.com";
-		PO_RegisterView.fillForm(driver, email, "Josefo", "Perez", "77777", "77777");
-		// Comprobamos que entramos en la sección privada
-		// SeleniumUtils.textoPresentePagina(driver, "josefoperez@gmail.com");
-		PO_View.checkKey(driver, "users.message", PO_Properties.getSPANISH());
+		int num = 0 + (int) (Math.random() * ((10000 - 0) + 1));
+		email = "josefoperez" + num + "@gmail.com";
+		PO_RegisterView.fillForm(driver, email, "Josefo", "123456789", "123456789");
+		// Comprobamos que redirecciona al login
+		SeleniumUtils.textoPresentePagina(driver, "Identificación");
+
 	}
 
 	// RegInval. Prueba del formulario de registro. registro con datos incorrectos
@@ -92,13 +94,13 @@ public class SocialNetworkTests {
 	@Test
 	public void P01_2RegInval() {
 		// Vamos al formulario de registro
-		PO_NavView.clickOption(driver, "signup", "class", "btn btn-primary");
+		PO_HomeView.clickOption(driver, "registrarse", "class", "btn btn-primary");
 		// Rellenamos el formulario.
-		PO_RegisterView.fillForm(driver, "josefoperez1@gmail.com", "Josefo", "Perez", "77777", "77778");
+		PO_RegisterView.fillForm(driver, "josefoperez1@gmail.com", "Josefo", "123456789", "123456788");
 		// Comprobamos que entramos en la sección privada
 		// PO_View.checkKey(driver, "Error.signup.passwordConfirm.coincidence",
 		// PO_Properties.getSPANISH());
-		SeleniumUtils.textoPresentePagina(driver, "Las contraseñas no coinciden");
+		SeleniumUtils.textoPresentePagina(driver, "La password y su confirmación deben ser iguales");
 	}
 
 	// InVal. Inicio de sesión con datos válidos
@@ -126,14 +128,15 @@ public class SocialNetworkTests {
 		PO_View.checkElement(driver, "text", "usuarios");
 	}
 
-	// LisUsrInVal. Intento de acceso con URL desde un usuario no identificado al listado
+	// LisUsrInVal. Intento de acceso con URL desde un usuario no identificado al
+	// listado
 	// de usuarios
 	// desde un usuario en sesión. Debe producirse un acceso no permitido a vistas
 	// privadas.
 	@Test
 	public void P03_2LisUsrInVal() {
 		driver.get("http://localhost:8081/usuario");
-		SeleniumUtils.textoPresentePagina(driver, "Identificate");
+		SeleniumUtils.textoPresentePagina(driver, "Identificación");
 	}
 
 	// BusUsrVal. Realizar una búsqueda valida en el listado de usuarios desde un
@@ -148,20 +151,22 @@ public class SocialNetworkTests {
 		assertTrue(elementos.size() == 2);
 	}
 
-	// BusUsrInVal. Intento de acceso con URL a la búsqueda de usuarios desde un usuario
+	// BusUsrInVal. Intento de acceso con URL a la búsqueda de usuarios desde un
+	// usuario
 	// no identificado. Debe producirse un acceso no permitido a vistas privadas
 	@Test
 	public void P04_2BusUsrInVal() {
 		driver.get("http://localhost:8081/usuario?busqueda=prueba2");
-		SeleniumUtils.textoPresentePagina(driver, "Identificate");
+		SeleniumUtils.textoPresentePagina(driver, "Identificación");
 	}
 
 	// InvVal. Enviar una invitación de amistad a un usuario de forma valida.
 	@Test
 	public void P05_1InvVal() {
 		PO_LoginView.fillForm(driver, "prueba1@prueba1.com", "prueba1");
-		List<WebElement> boton = PO_View.checkElement(driver, "text", "prueba4@uniovi.es");
+		List<WebElement> boton = PO_View.checkElement(driver, "text", "prueba4@prueba4.com");
 		boton.get(0).click();
+		SeleniumUtils.textoPresentePagina(driver, "Petición enviada con éxito");
 	}
 
 	// InvInVal. Enviar una invitación de amistad a un usuario al que ya le habíamos
@@ -172,28 +177,21 @@ public class SocialNetworkTests {
 	@Test
 	public void P05_2InvInVal() {
 		PO_LoginView.fillForm(driver, "prueba1@prueba1.com", "prueba1");
-		List<WebElement> boton = PO_View.checkElement(driver, "id", "peticion2");
+		List<WebElement> boton = PO_View.checkElement(driver, "text", "prueba4@prueba4.com");
 		boton.get(0).click();
-		List<WebElement> list = driver.findElements(By.xpath("//*[contains(@id,peticion2)]"));
-		assertTrue(list.size() > 0);
+		SeleniumUtils.textoPresentePagina(driver,
+				"Esta petición ya ha sido enviada o quizás deberías ver tu lista de peticiones recibidas");
 	}
 
 	// LisInvVal Listar las invitaciones recibidas por un usuario
 	@Test
 	public void P06_1LisInvVal() {
 		// Accedemos con el usuario creado anteriormente:
-		PO_LoginView.fillForm(driver, "josefoperez@gmail.com", "77777");
-		// Enviamos una peticion al usuario con email prueba1@uniovi.es
-		List<WebElement> boton = PO_View.checkElement(driver, "id", "peticion1");
-		boton.get(0).click();
-		SeleniumUtils.esperarSegundos(driver, 1);
-		PO_PrivateView.clickOption(driver, "logout", "text", "Identificate");
-		// entramos con el usuario prueba1@uniovi.es
-		PO_LoginView.fillForm(driver, "prueba1@uniovi.es", "123456");
-		// vamos a ver las peticiones de amistad
-		List<WebElement> elementos = PO_View.checkElement(driver, "free", "//li[contains(@id, 'users-menu')]/a");
+		PO_LoginView.fillForm(driver, "prueba4@prueba4.com", "prueba4");
+
+		List<WebElement> elementos = PO_View.checkElement(driver, "free", "//li[contains(@id, 'listaInvitaciones')]/a");
 		elementos.get(0).click();
-		elementos = PO_View.checkElement(driver, "free", "//a[contains(@href, 'peticion/list')]");
+		elementos = PO_View.checkElement(driver, "free", "//a[contains(@href, 'invitaciones')]");
 		elementos.get(0).click();
 		// SeleniumUtils.esperarSegundos(driver, 1);
 		elementos = SeleniumUtils.EsperaCargaPagina(driver, "free", "//tbody/tr", PO_View.getTimeout());
@@ -204,40 +202,38 @@ public class SocialNetworkTests {
 	// AcepInvVal Aceptar una invitacion recibida
 	@Test
 	public void P07_1AcepInvVal() {
-		// entramos con el usuario prueba1@uniovi.es
-		PO_LoginView.fillForm(driver, "prueba1@uniovi.es", "123456");
-		// vamos a ver las peticiones de amistad
-		List<WebElement> elementos = PO_View.checkElement(driver, "free", "//li[contains(@id, 'users-menu')]/a");
+		// Accedemos con el usuario creado anteriormente:
+		PO_LoginView.fillForm(driver, "prueba4@prueba4.com", "prueba4");
+
+		List<WebElement> elementos = PO_View.checkElement(driver, "free", "//li[contains(@id, 'listaInvitaciones')]/a");
 		elementos.get(0).click();
-		elementos = PO_View.checkElement(driver, "free", "//a[contains(@href, 'peticion/list')]");
+		elementos = PO_View.checkElement(driver, "free", "//a[contains(@href, 'invitaciones')]");
 		elementos.get(0).click();
-		// SeleniumUtils.esperarSegundos(driver, 1);
 		// aceptamos la invitacion
-		List<WebElement> boton = PO_View.checkElement(driver, "id", "petitionButton2");
+		List<WebElement> boton = PO_View.checkElement(driver, "text", "prueba1@prueba1.com");
 		boton.get(0).click();
 		// Ahora vamos a comprobar que se añadio el amigo
-		elementos = PO_View.checkElement(driver, "free", "//li[contains(@id, 'users-menu')]/a");
+		elementos = PO_View.checkElement(driver, "free", "//li[contains(@id, 'listaAmigos')]/a");
 		elementos.get(0).click();
-		elementos = PO_View.checkElement(driver, "free", "//a[contains(@href, 'amigos/list')]");
+		elementos = PO_View.checkElement(driver, "free", "//a[contains(@href, 'amigo')]");
 		elementos.get(0).click();
-		PO_View.checkElement(driver, "text", "josefoperez@gmail.com");
+		PO_View.checkElement(driver, "text", "prueba1@prueba1.com");
 	}
 
-	// ListAmiVal Listar los amigos de un usuario, realizar la comprobación con una lista que
+	// ListAmiVal Listar los amigos de un usuario, realizar la comprobación con una
+	// lista que
 	// al menos
 	// tenga un amigo.
 	@Test
 	public void P08_1ListAmiVal() {
-		// El usuario cuyo mail es prueba1 ya es amigo de josefo
-		PO_LoginView.fillForm(driver, "prueba1@uniovi.es", "123456");
-		List<WebElement> elementos = PO_View.checkElement(driver, "id", "users-menu");
+		// El usuario cuyo mail es prueba1 ya es amigo
+		PO_LoginView.fillForm(driver, "prueba1@prueba1.com", "prueba1");
+		List<WebElement> elementos = PO_View.checkElement(driver, "free", "//li[contains(@id, 'listaAmigos')]/a");
 		elementos.get(0).click();
-		List<WebElement> elementos2 = PO_View.checkElement(driver, "id", "friends");
-		elementos2.get(0).click();
+		elementos = PO_View.checkElement(driver, "free", "//a[contains(@href, 'amigo')]");
+		elementos.get(0).click();
 		elementos = SeleniumUtils.EsperaCargaPagina(driver, "free", "//tbody/tr", PO_View.getTimeout());
-		assertTrue(elementos.size() == 1);
+		assertTrue(elementos.size() == 2);
 	}
-
-	
 
 }

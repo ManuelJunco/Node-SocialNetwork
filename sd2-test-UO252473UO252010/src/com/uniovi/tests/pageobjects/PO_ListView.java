@@ -7,7 +7,7 @@ import org.openqa.selenium.WebElement;
 public class PO_ListView extends PO_NavView{
 
 	public static void search(WebDriver driver, String texto) {
-		WebElement busqueda = driver.findElement(By.name("searchText"));
+		WebElement busqueda = driver.findElement(By.name("busqueda"));
 		busqueda.click();
 		busqueda.clear();
 		busqueda.sendKeys(texto);
