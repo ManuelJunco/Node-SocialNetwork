@@ -266,6 +266,7 @@ module.exports = function(app, swig, gestorBD) {
 		
 	});
 
+/* ------------------------------------------- SOLO PARA PRUEBAS ---------------------------------------------------- */
 
     /* Delete BD - it is not protected */
     app.get("/borrarBD", function(req, res) {
@@ -285,6 +286,82 @@ module.exports = function(app, swig, gestorBD) {
                                 res.send("EL BORRADO DE DATOS SE HA REALIZADO CORRECTAMENTE");
                             }
                         });
+                    }
+                });
+            }
+        });
+    });
+
+    /* Create users - it is not protected */
+    app.get("/crearUsuarios", function(req, res) {
+        var usuario1 = {
+            email : "prueba1@prueba1.com",
+            password: "prueba1",
+            nombre: "prueba1"
+        }
+        gestorBD.insertarUsuario(usuario1, function (id) {
+            if (id == null) {
+                res.send(respuesta);
+            } else {
+                var usuario2 = {
+                    email : "prueba2@prueba2.com",
+                    password: "prueba2",
+                    nombre: "prueba2"
+                }
+                gestorBD.insertarUsuario(usuario2, function (id) {
+                    if (id == null) {
+                        res.send(respuesta);
+                    } else {
+                        var usuario3 = {
+                            email : "prueba3@prueba3.com",
+                            password: "prueba3",
+                            nombre: "prueba3"
+                        }
+                        gestorBD.insertarUsuario(usuario3, function (id) {
+                            if (id == null) {
+                                res.send(respuesta);
+                            } else {
+                                var usuario4 = {
+                                    email : "prueba4@prueba4.com",
+                                    password: "prueba4",
+                                    nombre: "prueba4"
+                                }
+                                gestorBD.insertarUsuario(usuario4, function (id) {
+                                    if (id == null) {
+                                        res.send(respuesta);
+                                    } else {
+                                        res.send("USUARIOS AÑADIDOS CORRECTAMENTE");
+                                    }
+                                });
+                            }
+                        });
+                    }
+                });
+            }
+        });
+    });
+
+    /* Create friendship - it is not protected */
+    app.get("/establecerAmistades", function(req, res) {
+        var peticion1 = {
+            origen: "prueba1@prueba1.com",
+            destino: "prueba3@prueba3.com",
+            aceptada: true
+        }
+        gestorBD.insertarPeticion(peticion1, function (id) {
+            if (id == null) {
+                res.send("Problemas insertando la peticion prueba1 - prueba3");
+            } else {
+                var peticion2 = {
+                    origen: "prueba1@prueba1.com",
+                    destino: "prueba2@prueba2.com",
+                    aceptada: true
+                }
+                gestorBD.insertarPeticion(peticion2, function (id) {
+                    if (id == null) {
+                        res.send("Problemas insertando la peticion prueba1 - prueba2");
+                    } else {
+                        res.send("AMISTADES INSERTADAS CORRECTAMENTE");
                     }
                 });
             }
