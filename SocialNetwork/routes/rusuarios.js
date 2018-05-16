@@ -294,36 +294,44 @@ module.exports = function(app, swig, gestorBD) {
 
     /* Create users - it is not protected */
     app.get("/crearUsuarios", function(req, res) {
+        var seguro = app.get("crypto").createHmac('sha256', app.get('clave'))
+            .update('prueba1').digest('hex');
         var usuario1 = {
-            email : "prueba1@prueba1.com",
-            password: "prueba1",
-            nombre: "prueba1"
+            email : 'prueba1@prueba1.com',
+            password: seguro,
+            nombre: 'prueba1'
         }
         gestorBD.insertarUsuario(usuario1, function (id) {
             if (id == null) {
                 res.send(respuesta);
             } else {
+                var seguro1 = app.get("crypto").createHmac('sha256', app.get('clave'))
+                    .update('prueba2').digest('hex');
                 var usuario2 = {
                     email : "prueba2@prueba2.com",
-                    password: "prueba2",
+                    password: seguro1,
                     nombre: "prueba2"
                 }
                 gestorBD.insertarUsuario(usuario2, function (id) {
                     if (id == null) {
                         res.send(respuesta);
                     } else {
+                        var seguro2 = app.get("crypto").createHmac('sha256', app.get('clave'))
+                            .update('prueba3').digest('hex');
                         var usuario3 = {
                             email : "prueba3@prueba3.com",
-                            password: "prueba3",
+                            password: seguro2,
                             nombre: "prueba3"
                         }
                         gestorBD.insertarUsuario(usuario3, function (id) {
                             if (id == null) {
                                 res.send(respuesta);
                             } else {
+                                var seguro3 = app.get("crypto").createHmac('sha256', app.get('clave'))
+                                    .update('prueba4').digest('hex');
                                 var usuario4 = {
                                     email : "prueba4@prueba4.com",
-                                    password: "prueba4",
+                                    password: seguro3,
                                     nombre: "prueba4"
                                 }
                                 gestorBD.insertarUsuario(usuario4, function (id) {
