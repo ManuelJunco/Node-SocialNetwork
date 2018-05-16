@@ -28,10 +28,10 @@ import com.uniovi.tests.util.SeleniumUtils;
 public class SocialNetworkTests {
 	// En Windows (Debe ser la versión 46.0 y desactivar las actualizacioens
 	// automáticas)):
-	 static String PathFirefox = "D:\\UNIVERSIDAD\\Segundo Semestre\\SDI\\Sesion 05\\Firefox46.win\\FirefoxPortable.exe";
+	 //static String PathFirefox = "D:\\UNIVERSIDAD\\Segundo Semestre\\SDI\\Sesion 05\\Firefox46.win\\FirefoxPortable.exe";
 
 	private String email;
-//	static String PathFirefox = "Firefox46.win\\FirefoxPortable.exe";
+	static String PathFirefox = "Firefox46.win\\FirefoxPortable.exe";
 
 	// Común a Windows y a MACOSX
 	public static WebDriver driver = getDriver(PathFirefox);
@@ -59,6 +59,8 @@ public class SocialNetworkTests {
 	// Antes de la primera prueba
 	@BeforeClass
 	static public void begin() {
+		//borramos base de datos
+		driver.navigate().to("http://localhost:8081/borrarBD");
 		// navego a la url home ya que se ejecuta antes que el método setup
 		driver.navigate().to(URL);
 	}
@@ -81,6 +83,15 @@ public class SocialNetworkTests {
 		PO_RegisterView.fillForm(driver, email, "Josefo", "123456789", "123456789");
 		// Comprobamos que redirecciona al login
 		SeleniumUtils.textoPresentePagina(driver, "Identificación");
+		//añadimos más usuarios
+		PO_HomeView.clickOption(driver, "registrarse", "class", "btn btn-primary");
+		PO_RegisterView.fillForm(driver, "prueba1@prueba1.com", "Prueba1", "prueba1", "prueba1");
+		PO_HomeView.clickOption(driver, "registrarse", "class", "btn btn-primary");
+		PO_RegisterView.fillForm(driver, "prueba2@prueba2.com", "Prueba2", "prueba2", "prueba2");
+		PO_HomeView.clickOption(driver, "registrarse", "class", "btn btn-primary");
+		PO_RegisterView.fillForm(driver, "prueba3@prueba3.com", "Prueba3", "prueba3", "prueba3");
+		PO_HomeView.clickOption(driver, "registrarse", "class", "btn btn-primary");
+		PO_RegisterView.fillForm(driver, "prueba4@prueba4.com", "Prueba4", "prueba4" , "prueba4");
 
 	}
 
@@ -143,7 +154,7 @@ public class SocialNetworkTests {
 		PO_ListView.search(driver, "prueba2");
 		List<WebElement> elementos = SeleniumUtils.EsperaCargaPagina(driver, "free", "//tbody/tr",
 				PO_View.getTimeout());
-		assertTrue(elementos.size() == 2);
+		assertTrue(elementos.size() == 1);
 	}
 
 	// BusUsrInVal. Intento de acceso con URL a la búsqueda de usuarios desde un
@@ -162,6 +173,11 @@ public class SocialNetworkTests {
 		List<WebElement> boton = PO_View.checkElement(driver, "id", "prueba4@prueba4.com");
 		boton.get(0).click();
 		SeleniumUtils.textoPresentePagina(driver, "Petición enviada con éxito");
+		//enviamos más peticiones
+		boton = PO_View.checkElement(driver, "id", "prueba2@prueba2.com");
+		boton.get(0).click();
+		boton = PO_View.checkElement(driver, "id", "prueba3@prueba3.com");
+		boton.get(0).click();
 	}
 
 	// InvInVal. Enviar una invitación de amistad a un usuario al que ya le habíamos
@@ -228,7 +244,7 @@ public class SocialNetworkTests {
 		elementos = PO_View.checkElement(driver, "free", "//a[contains(@href, 'amigo')]");
 		elementos.get(0).click();
 		elementos = SeleniumUtils.EsperaCargaPagina(driver, "free", "//tbody/tr", PO_View.getTimeout());
-		assertTrue(elementos.size() == 3);
+		assertTrue(elementos.size() >= 3);
 	}
 
 	// CInVal Inicio de sesión con datos válidos
@@ -268,8 +284,8 @@ public class SocialNetworkTests {
 		driver.navigate().to("http://localhost:8081/cliente.html");
 		PO_LoginView.fillForm(driver, "prueba1@prueba1.com", "prueba1");
 		PO_LoginView.checkElement(driver, "text", "Bienvenido");
-		PO_ListView.search(driver, "prueba2");
-		SeleniumUtils.textoPresentePagina(driver, "prueba2");
+		PO_ListView.search(driver, "Prueba4");
+		SeleniumUtils.textoPresentePagina(driver, "Prueba4");
 	}
 
 	// CListMenVal Acceder a la lista de mensajes de un amigo “chat”, la
@@ -280,8 +296,8 @@ public class SocialNetworkTests {
 		driver.navigate().to("http://localhost:8081/cliente.html");
 		PO_LoginView.fillForm(driver, "prueba1@prueba1.com", "prueba1");
 		PO_LoginView.checkElement(driver, "text", "Bienvenido");
-
-		List<WebElement> elementos = PO_View.checkElement(driver, "text", "prueba2");
+		SeleniumUtils.textoPresentePagina(driver, "Prueba4");
+		List<WebElement> elementos = PO_View.checkElement(driver, "text", "Prueba4");
 		elementos.get(0).click();
 
 		// Enviamos 3 mensajes
@@ -302,8 +318,8 @@ public class SocialNetworkTests {
 		driver.navigate().to("http://localhost:8081/cliente.html");
 		PO_LoginView.fillForm(driver, "prueba1@prueba1.com", "prueba1");
 		PO_LoginView.checkElement(driver, "text", "Bienvenido");
-
-		List<WebElement> elementos = PO_View.checkElement(driver, "text", "prueba2");
+		SeleniumUtils.textoPresentePagina(driver, "Prueba4");
+		List<WebElement> elementos = PO_View.checkElement(driver, "text", "Prueba4");
 		elementos.get(0).click();
 		
 		//Enviamos nuevo mensaje
